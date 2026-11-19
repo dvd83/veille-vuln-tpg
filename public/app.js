@@ -25,6 +25,23 @@
   const safeUrl = u => /^https?:\/\//i.test(u || '') ? u : '#';
   const fmt = iso => { try { return new Date(iso).toLocaleString('fr-CH', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }); } catch (e) { return ''; } };
   const lvl = l => ({ red: 't-red', amber: 't-amber' }[l] || 't-grey');
+  const dmy = d => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(d || ''); return m ? m[3] + '.' + m[2] : (d || ''); };
+  function prio(p) { if (!p) return null; const x = el('span', 'prio prio-' + String(p).toLowerCase(), p); x.title = p === 'P1' ? 'Exploitation confirmée ou risque de compromission majeur' : 'Exploitation sous conditions ou avec privilèges'; return x; }
+  function kevBadge(d) {
+    if (!d) return null;
+    const days = Math.round((new Date(d + 'T23:59:59') - new Date()) / 86400000);
+    const b = el('span', 'tag kevdue' + (days <= 2 ? ' soon' : ''), 'Échéance KEV ' + dmy(d) + (days >= 0 ? ' (J-' + days + ')' : ' (dépassée)'));
+    return b;
+  }
+  function meta(item) {
+    const parts = [];
+    if (item.epss) parts.push(['EPSS', item.epss]);
+    if (item.fix) parts.push(['Correctif', item.fix]);
+    if (!parts.length) return null;
+    const m = el('div', 'meta');
+    parts.forEach(([k, v]) => { const s = el('span'); s.appendChild(el('b', null, k + ' : ')); s.appendChild(document.createTextNode(v)); m.appendChild(s); });
+    return m;
+  }
 
   // ---------- nom ----------
   const me = $('me');
@@ -48,9 +65,13 @@
   function card(item, extra) {
     const c = el('div', 'card' + (extra ? ' ' + extra : ''));
     c.dataset.key = item.key;
-    c.appendChild(tags(item.tags));
+    const tg = tags(item.tags);
+    const kb = kevBadge(item.kevDue); if (kb) tg.prepend(kb);
+    const pr = prio(item.priority); if (pr) tg.prepend(pr);
+    c.appendChild(tg);
     const h = el('h3', null, item.title); h.appendChild(cveLine(item.cves)); c.appendChild(h);
     if (item.body) { const p = el('p'); p.appendChild(rich(item.body)); c.appendChild(p); }
+    const mt = meta(item); if (mt) c.appendChild(mt);
     if (item.pourNous) { const d = el('div', 'tpg'); d.appendChild(el('b', null, 'Pour nous → ')); d.appendChild(rich(item.pourNous)); c.appendChild(d); }
     if (item.sources && item.sources.length) {
       const s = el('div', 'src', 'Sources : ');
@@ -62,8 +83,11 @@
   }
   function row(r) {
     const d = el('div', 'row'); d.dataset.key = r.key;
-    const w = el('div', 'what'); w.appendChild(el('b', null, r.title)); w.appendChild(cveLine(r.cves));
+    const w = el('div', 'what');
+    const pr = prio(r.priority); if (pr) { w.appendChild(pr); w.appendChild(document.createTextNode(' ')); }
+    w.appendChild(el('b', null, r.title)); w.appendChild(cveLine(r.cves));
     if (r.tag) { w.appendChild(document.createTextNode(' ')); w.appendChild(el('span', 'tag ' + lvl(r.tag.level), r.tag.label)); }
+    const kb = kevBadge(r.kevDue); if (kb) { w.appendChild(document.createTextNode(' ')); w.appendChild(kb); }
     if (r.sub) { const s = el('div', 'sub'); s.appendChild(rich(r.sub)); w.appendChild(s); }
     d.appendChild(w); d.appendChild(el('div', 'team', r.team || ''));
     addAck(d, r.key);
@@ -169,6 +193,20 @@
     if (ed.kev?.length) { ed.kev.forEach(i => $('kev').appendChild(card(i))); $('secKev').hidden = false; }
     if (ed.correctifs?.length) { ed.correctifs.forEach(i => $('corr').appendChild(card(i))); $('secCorr').hidden = false; }
     if (ed.chaud?.length) { ed.chaud.forEach(r => $('chaud').appendChild(row(r))); $('secChaud').hidden = false; }
+    if (ed.horsPerimetre?.length) {
+      const t = $('hors');
+      ed.horsPerimetre.forEach(h => {
+        const tr = el('tr');
+        const c1 = el('td'); c1.appendChild(el('span', 'cve', h.cve)); tr.appendChild(c1);
+        tr.appendChild(el('td', 'hp-prod', h.product));
+        tr.appendChild(el('td', 'hp-cvss', h.cvss || ''));
+        tr.appendChild(el('td', null, h.note || ''));
+        t.appendChild(tr);
+      });
+      $('secHors').hidden = false;
+    }
+    if (ed.volume) $('volume').textContent = 'Volume du jour : ' + ed.volume.published + ' CVE publiées, dont ' + ed.volume.critical + ' critiques' + (ed.volume.source ? ' (' + ed.volume.source + ')' : '') + '.';
+    if (ed.limites) $('limites').textContent = 'Limites de collecte : ' + ed.limites;
     if (ed.checklist?.length) {
       ed.checklist.forEach(c => { const li = el('li'); li.appendChild(el('b', null, c.team)); li.appendChild(document.createTextNode(' — ' + c.text)); $('check').appendChild(li); });
       $('secCheck').hidden = false;

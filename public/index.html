@@ -115,6 +115,21 @@
   .whoami input{font:inherit;font-size:14.5px;border:1px solid var(--line);border-radius:3px;padding:5px 9px;min-width:200px}
   #meSaved{color:var(--muted);font-size:13px}
   @media (max-width:580px){.whoami{padding:12px 18px}}
+
+  .prio{display:inline-block;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:13px;letter-spacing:.04em;padding:1px 8px;border-radius:2px;color:#fff;vertical-align:1px}
+  .prio-p1{background:var(--red)} .prio-p2{background:#e0a100;color:#2b2b2b}
+  .kevdue{background:#fff;border:1px solid var(--red);color:var(--red)}
+  .kevdue.soon{background:var(--red);color:#fff}
+  .meta{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:14px;color:#3b3934;margin:2px 0 8px}
+  .meta b{color:var(--muted);font-weight:600}
+  .hp-intro{margin:0 0 10px;color:var(--muted);font-size:14.5px}
+  table.hp{width:100%;border-collapse:collapse;font-size:14px}
+  table.hp td{padding:7px 8px;border-top:1px solid var(--line);vertical-align:top}
+  table.hp tr:first-child td{border-top:0}
+  .hp-prod{font-weight:600;white-space:nowrap} .hp-cvss{font-weight:700;color:var(--red);white-space:nowrap}
+  .limits{font-size:13px;color:var(--muted);background:#faf8f5}
+  .limits div{margin-bottom:5px}
+  @media (max-width:580px){table.hp td:nth-child(4){display:none}}
 </style>
 </head>
 <body>
@@ -242,7 +257,13 @@
 <section id="secKev" hidden><h2 class="red">Exploitées activement — nouveautés KEV</h2><div id="kev"></div></section>
 <section id="secCorr" hidden><h2 class="amber">Nouveaux correctifs critiques</h2><div id="corr"></div></section>
 <section id="secChaud" hidden><h2 class="amber">Toujours chaud — rappels</h2><div id="chaud"></div></section>
+<section id="secHors" hidden><h2>Vu mais hors périmètre probable</h2>
+  <p class="hp-intro">CVE critiques du jour sur des produits a priori absents des tpg — listées pour mémoire. Signalez-le si l'un d'eux est utilisé.</p>
+  <table class="hp"><tbody id="hors"></tbody></table>
+</section>
 <section id="secCheck" hidden><h2 class="green">Checklist du jour pour le pôle</h2><ul class="check" id="check"></ul></section>
+
+<section class="limits"><div id="volume"></div><div id="limites"></div><div class="legend-prio"><span class="prio prio-p1">P1</span> exploitation confirmée ou risque de compromission majeur · <span class="prio prio-p2">P2</span> exploitation sous conditions ou avec privilèges · « NV » = non vérifié</div></section>
 
 <footer>
   <div class="fbrand"><span>tpg</span> · Veille sécurité</div>

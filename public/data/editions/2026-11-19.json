@@ -1,7 +1,11 @@
 {
   "date": "2026-11-19",
   "dateLabel": "Jeudi 19 novembre 2026",
-  "stats": { "kevYesterday": 4, "kevWeek": 7, "kevDue7d": 8 },
+  "stats": {
+    "kevYesterday": 4,
+    "kevWeek": 7,
+    "kevDue7d": 8
+  },
   "essentiel": [
     "La journée est dominée par **« Java4Shell »**, une faille critique dans le cœur de Java 17+ que la CISA demande de corriger immédiatement. Pas encore d'exploitation confirmée, mais les détails techniques ont fuité.",
     "Côté exploitations actives : **Apache Axis** (via Confluence Data Center et N-able N-central) et **Puppet Enterprise** rejoignent le catalogue KEV. Rappel : l'**Outlook zero-day** du Patch Tuesday a une échéance KEV au 24 novembre."
@@ -9,61 +13,261 @@
   "une": {
     "key": "CVE-2026-114938",
     "title": "Java4Shell — RCE sans authentification dans OpenJDK / Oracle Java",
-    "cves": ["CVE-2026-114938"],
+    "cves": [
+      "CVE-2026-114938"
+    ],
     "tags": [
-      { "label": "Critique · CVSSv4 9.2", "level": "red" },
-      { "label": "Exploitation non confirmée", "level": "amber" },
-      { "label": "Patch dispo 17.11", "level": "grey" }
+      {
+        "label": "Critique · CVSSv4 9.2",
+        "level": "red"
+      },
+      {
+        "label": "Exploitation non confirmée",
+        "level": "amber"
+      },
+      {
+        "label": "Patch dispo 17.11",
+        "level": "grey"
+      }
     ],
     "body": "Débordement de tas dans le décodeur Base64 de la JVM HotSpot x86-64, Java 17 et plus. Une entrée Base64 forgée peut faire planter la JVM et permettre une exécution de code à distance. Oracle a publié des builds corrigés le 17 novembre ; mettre à jour le runtime est la seule correction complète. L'exploitation dépendrait de certains processeurs, mais la cause racine est publique.",
     "pourNous": "Systèmes + SecOps : inventaire des JDK/JRE ≥ 17 (serveurs applicatifs, images OpenShift, appliances éditeurs), priorité aux services exposés.",
     "sources": [
-      { "label": "CISA", "url": "https://www.cisa.gov/news-events/alerts/2026/11/17/critical-java-vulnerability-requires-immediate-patching" },
-      { "label": "Qualys", "url": "https://blog.qualys.com/vulnerabilities-threat-research/2026/11/17/how-to-find-mitigate-and-patch-the-critical-java4shell-flaw-cve-2026-114938-now" },
-      { "label": "Rapid7", "url": "https://www.rapid7.com/blog/post/etr-cve-2026-114938-reported-critical-pre-authentication-remote-code-execution-java-17/" }
-    ]
+      {
+        "label": "CISA",
+        "url": "https://www.cisa.gov/news-events/alerts/2026/11/17/critical-java-vulnerability-requires-immediate-patching"
+      },
+      {
+        "label": "Qualys",
+        "url": "https://blog.qualys.com/vulnerabilities-threat-research/2026/11/17/how-to-find-mitigate-and-patch-the-critical-java4shell-flaw-cve-2026-114938-now"
+      },
+      {
+        "label": "Rapid7",
+        "url": "https://www.rapid7.com/blog/post/etr-cve-2026-114938-reported-critical-pre-authentication-remote-code-execution-java-17/"
+      }
+    ],
+    "priority": "P1",
+    "epss": "NV",
+    "fix": "Builds Oracle du 17.11 (mise à jour du runtime Java)"
   },
   "kev": [
     {
       "key": "CVE-2026-90436",
       "title": "Apache Axis 1.x — RCE non authentifiée",
-      "cves": ["CVE-2026-90436"],
-      "tags": [{ "label": "KEV 18.11", "level": "red" }, { "label": "CVSS 9.8", "level": "red" }],
+      "cves": [
+        "CVE-2026-90436"
+      ],
+      "tags": [
+        {
+          "label": "KEV 18.11",
+          "level": "red"
+        },
+        {
+          "label": "CVSS 9.8",
+          "level": "red"
+        }
+      ],
       "body": "Réflexion non sûre dans l'implémentation SOAP Axis. Divulguée le 6 novembre, elle touche certaines versions de Confluence Data Center et de N-able N-central, toutes deux désormais attaquées.",
       "pourNous": "Vérifier si Confluence DC est utilisé ; chercher des JAR Axis 1.x dans les applis Java legacy.",
-      "sources": [{ "label": "Rapid7", "url": "https://www.rapid7.com/blog/post/etr-rapid7-detected-exploitation-of-cve-2026-90436-against-atlassian-confluence-data-center-n-able-n-central-also-exploited/" }]
+      "sources": [
+        {
+          "label": "Rapid7",
+          "url": "https://www.rapid7.com/blog/post/etr-rapid7-detected-exploitation-of-cve-2026-90436-against-atlassian-confluence-data-center-n-able-n-central-also-exploited/"
+        }
+      ],
+      "priority": "P1",
+      "kevDue": "2026-11-21",
+      "epss": "1,13 %",
+      "fix": "Pas de version corrective (Axis 1.x en fin de vie) : patch du commit 41f3b4e8 ou migration vers un moteur SOAP maintenu"
     },
     {
       "key": "CVE-2026-115731",
       "title": "Perforce Puppet Enterprise — RCE par désérialisation",
-      "cves": ["CVE-2026-115731"],
-      "tags": [{ "label": "KEV 17.11", "level": "red" }, { "label": "CVSS 9.4", "level": "red" }],
+      "cves": [
+        "CVE-2026-115731"
+      ],
+      "tags": [
+        {
+          "label": "KEV 17.11",
+          "level": "red"
+        },
+        {
+          "label": "CVSS 9.4",
+          "level": "red"
+        }
+      ],
       "body": "Dans le traitement des rapports : tout client disposant d'un certificat agent signé par la CA peut exécuter du code sur le serveur.",
       "pourNous": "Systèmes : concerné seulement si Puppet sert à la gestion de configuration.",
-      "sources": [{ "label": "The Hacker News", "url": "https://thehackernews.com/2026/11/hackers-exploiting-critical-puppet-rce.html" }]
+      "sources": [
+        {
+          "label": "The Hacker News",
+          "url": "https://thehackernews.com/2026/11/hackers-exploiting-critical-puppet-rce.html"
+        }
+      ],
+      "priority": "P1",
+      "epss": "0,69 %"
     },
     {
       "key": "KEV-2026-11-18-autres",
       "title": "Autres ajouts KEV d'hier",
-      "cves": ["CVE-2024-10441", "CVE-2026-40217", "CVE-2026-90817"],
-      "tags": [{ "label": "KEV 18.11", "level": "red" }, { "label": "Hors périmètre probable", "level": "grey" }],
+      "cves": [
+        "CVE-2024-10441",
+        "CVE-2026-40217",
+        "CVE-2026-90817"
+      ],
+      "tags": [
+        {
+          "label": "KEV 18.11",
+          "level": "red"
+        },
+        {
+          "label": "Hors périmètre probable",
+          "level": "grey"
+        }
+      ],
       "body": "Synology DSM, BerriAI LiteLLM et REDCap.",
       "pourNous": "Stockage : un NAS Synology quelque part (sauvegarde secondaire, labo) ? LiteLLM : des équipes testent-elles des passerelles IA ?",
-      "sources": [{ "label": "CISA", "url": "https://www.cisa.gov/news-events/alerts/2026/11/18/cisa-adds-four-known-exploited-vulnerabilities-catalog" }]
+      "sources": [
+        {
+          "label": "CISA",
+          "url": "https://www.cisa.gov/news-events/alerts/2026/11/18/cisa-adds-four-known-exploited-vulnerabilities-catalog"
+        }
+      ],
+      "priority": "P1",
+      "fix": "Synology DSM 7.2.2-72806-1 (selon branche) ; LiteLLM et REDCap : NV"
     }
   ],
   "correctifs": [],
   "chaud": [
-    { "key": "CVE-2026-124194", "title": "Outlook", "cves": ["CVE-2026-124194"], "tag": { "label": "Exploitée · KEV dû 24.11", "level": "red" }, "sub": "Fuite d'empreintes NTLM, seul zero-day du Patch Tuesday de novembre.", "team": "Exchange · Poste de travail" },
-    { "key": "CVE-2026-116928", "title": "Windows Search · LDAP", "cves": ["CVE-2026-116928", "CVE-2026-119958"], "tag": { "label": "Critique 9.8", "level": "amber" }, "sub": "RCE non exploitées à ce jour ; contrôleurs de domaine en priorité.", "team": "Systèmes" },
-    { "key": "CVE-2026-123158", "title": "OpenSSH « SSHole »", "cves": ["CVE-2026-123158"], "tag": { "label": "Exploitée · KEV", "level": "red" }, "sub": "musl sans PAM (Alpine, OpenWrt, embarqué), corrigé en 10.6p2. RHEL non concerné.", "team": "Systèmes · Réseau" },
-    { "key": "CVE-2026-125350", "title": "Chrome", "cves": ["CVE-2026-125350"], "tag": { "label": "Exploitée · KEV dû 24.11", "level": "red" }, "sub": "8e zero-day Chrome de 2026, corrigé en 157.0.8103.50.", "team": "Poste de travail" },
-    { "key": "FORTINET-2026-11-10", "title": "Fortinet — 89 avis du 10.11", "cves": ["CVE-2026-126253", "CVE-2026-126254"], "tag": { "label": "~17 critiques", "level": "amber" }, "sub": "Dont FortiOS OSPF et BGP.", "team": "Réseau" }
+    {
+      "key": "CVE-2026-124194",
+      "title": "Outlook",
+      "cves": [
+        "CVE-2026-124194"
+      ],
+      "tag": {
+        "label": "Exploitée · KEV dû 24.11",
+        "level": "red"
+      },
+      "sub": "Fuite d'empreintes NTLM, seul zero-day du Patch Tuesday de novembre.",
+      "team": "Exchange · Poste de travail",
+      "priority": "P1",
+      "kevDue": "2026-11-24"
+    },
+    {
+      "key": "CVE-2026-116928",
+      "title": "Windows Search · LDAP",
+      "cves": [
+        "CVE-2026-116928",
+        "CVE-2026-119958"
+      ],
+      "tag": {
+        "label": "Critique 9.8",
+        "level": "amber"
+      },
+      "sub": "RCE non exploitées à ce jour ; contrôleurs de domaine en priorité.",
+      "team": "Systèmes",
+      "priority": "P2"
+    },
+    {
+      "key": "CVE-2026-123158",
+      "title": "OpenSSH « SSHole »",
+      "cves": [
+        "CVE-2026-123158"
+      ],
+      "tag": {
+        "label": "Exploitée · KEV",
+        "level": "red"
+      },
+      "sub": "musl sans PAM (Alpine, OpenWrt, embarqué), corrigé en 10.6p2. RHEL non concerné.",
+      "team": "Systèmes · Réseau",
+      "priority": "P1"
+    },
+    {
+      "key": "CVE-2026-125350",
+      "title": "Chrome",
+      "cves": [
+        "CVE-2026-125350"
+      ],
+      "tag": {
+        "label": "Exploitée · KEV dû 24.11",
+        "level": "red"
+      },
+      "sub": "8e zero-day Chrome de 2026, corrigé en 157.0.8103.50.",
+      "team": "Poste de travail",
+      "priority": "P1",
+      "kevDue": "2026-11-24"
+    },
+    {
+      "key": "FORTINET-2026-11-10",
+      "title": "Fortinet — 89 avis du 10.11",
+      "cves": [
+        "CVE-2026-126253",
+        "CVE-2026-126254"
+      ],
+      "tag": {
+        "label": "~17 critiques",
+        "level": "amber"
+      },
+      "sub": "Dont FortiOS OSPF et BGP.",
+      "team": "Réseau",
+      "priority": "P2"
+    }
   ],
   "checklist": [
-    { "team": "Systèmes", "text": "lancer l'inventaire Java ≥ 17 (Java4Shell) et préparer un changement pour le CAB de mardi." },
-    { "team": "Poste de travail / SD", "text": "contrôler le déploiement Office (Outlook) et Chrome avant l'échéance du 24.11." },
-    { "team": "Systèmes", "text": "confirmer le cumulatif de novembre sur les contrôleurs de domaine (LDAP)." },
-    { "team": "Réseau", "text": "vérifier les versions FortiOS si OSPF/BGP actifs sur les FortiGate." }
-  ]
+    {
+      "team": "Systèmes",
+      "text": "lancer l'inventaire Java ≥ 17 (Java4Shell) et préparer un changement pour le CAB de mardi."
+    },
+    {
+      "team": "Poste de travail / SD",
+      "text": "contrôler le déploiement Office (Outlook) et Chrome avant l'échéance du 24.11."
+    },
+    {
+      "team": "Systèmes",
+      "text": "confirmer le cumulatif de novembre sur les contrôleurs de domaine (LDAP)."
+    },
+    {
+      "team": "Réseau",
+      "text": "vérifier les versions FortiOS si OSPF/BGP actifs sur les FortiGate."
+    }
+  ],
+  "horsPerimetre": [
+    {
+      "cve": "CVE-2026-130778",
+      "product": "Incus",
+      "cvss": "10,0",
+      "note": "Contournement d'authentification TLS — corrigé en 7.6.0"
+    },
+    {
+      "cve": "CVE-2026-129989",
+      "product": "Dokploy (+4 autres CVE)",
+      "cvss": "9,9",
+      "note": "Compromission de l'hôte — corrigé en 0.31.1"
+    },
+    {
+      "cve": "CVE-2026-73969",
+      "product": "AnsibleForms",
+      "cvss": "9,8",
+      "note": "Falsification de JWT si ACCESS_TOKEN_SECRET absent — corrigé en 6.2.1"
+    },
+    {
+      "cve": "CVE-2026-130759",
+      "product": "FleetDM Fleet",
+      "cvss": "9,4",
+      "note": "Contournement SAML SSO — correctifs par branche"
+    },
+    {
+      "cve": "CVE-2026-132143",
+      "product": "DrayTek Vigor2960",
+      "cvss": "9,4",
+      "note": "Débordement de pile (sauvegardes) — correctif NV"
+    }
+  ],
+  "volume": {
+    "published": 712,
+    "critical": 100,
+    "source": "CVE Now, CVE publiées le 18.11"
+  },
+  "limites": "EPSS non vérifiés auprès de FIRST sauf mention ; versions/correctifs « NV » = non vérifiés dans les sources consultées. Pas d'inventaire d'actifs tpg : la colonne « Pour nous » reste une piste à valider."
 }
