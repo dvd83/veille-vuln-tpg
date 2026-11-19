@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Veille vulnérabilités – tpg</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --orange:#f07d00; --orange-dark:#c96500; --orange-soft:#fff1e2;
+    --anthra:#2b2b2b; --ink:#1e1e1e; --muted:#62605c; --line:#e7e2db; --bg:#f4f1ec; --paper:#fff;
+    --red:#c62828; --red-bg:#fdecec; --amber:#a35c00; --amber-bg:#fff3df; --green:#2e7d32; --green-bg:#e8f4e9; --grey-bg:#efede9;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font-family:Barlow,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);line-height:1.5;font-size:16px}
+  .wrap{max-width:760px;margin:0 auto;padding:24px 14px 56px}
+  .mail{background:var(--paper);border-radius:4px;overflow:hidden;box-shadow:0 2px 14px rgba(43,43,43,.08)}
+
+  /* ---------- header ---------- */
+  header{background:var(--orange);color:#fff;position:relative}
+  .hd-top{padding:26px 32px 0;position:relative;z-index:2}
+  .brandline{display:flex;align-items:center;gap:10px;font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+  .brandline .pill{background:#fff;color:var(--orange);font-weight:800;letter-spacing:.02em;text-transform:none;font-size:15px;padding:1px 9px;border-radius:3px}
+  h1{font-family:"Barlow Condensed",Barlow,sans-serif;font-weight:700;font-size:44px;line-height:1;margin:14px 0 6px;letter-spacing:.005em;text-transform:uppercase}
+  .date{font-weight:500;font-size:16px;opacity:.95}
+  .tram{display:block;width:100%;height:auto;margin-top:6px}
+
+  /* ---------- stats ---------- */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);background:var(--anthra);color:#fff}
+  .stat{padding:14px 10px 13px;text-align:center;border-right:1px solid rgba(255,255,255,.12)}
+  .stat:last-child{border-right:0}
+  .stat b{display:block;font-family:"Barlow Condensed",sans-serif;font-size:30px;line-height:1;color:var(--orange)}
+  .stat span{font-size:12.5px;opacity:.85}
+
+  section{padding:26px 32px;border-bottom:1px solid var(--line)}
+  h2{font-family:"Barlow Condensed",sans-serif;font-size:21px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;margin:0 0 16px;display:flex;align-items:center;gap:10px;color:var(--anthra)}
+  h2::before{content:"";width:6px;height:20px;background:var(--orange);border-radius:1px}
+  h2.red::before{background:var(--red)} h2.amber::before{background:#e0a100} h2.green::before{background:var(--green)}
+  .edito p{margin:0 0 10px;font-size:17px}
+
+  .card{border:1px solid var(--line);border-radius:4px;padding:16px 18px 14px;margin-bottom:14px;background:#fff}
+  .card.une{border-top:4px solid var(--orange);background:linear-gradient(180deg,var(--orange-soft),#fff 70%)}
+  .card h3{font-size:18px;line-height:1.3;margin:6px 0 6px;font-weight:700}
+  .card p{margin:0 0 8px;color:#33312e}
+  .tags{display:flex;flex-wrap:wrap;gap:6px}
+  .tag{font-size:12px;font-weight:700;padding:2px 9px;border-radius:2px;white-space:nowrap;text-transform:uppercase;letter-spacing:.03em}
+  .t-red{background:var(--red-bg);color:var(--red)} .t-amber{background:var(--amber-bg);color:var(--amber)} .t-grey{background:var(--grey-bg);color:#4d4a45}
+  .cve{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12px;font-weight:500;background:var(--grey-bg);padding:1px 6px;border-radius:3px;color:#3b3934;white-space:nowrap}
+  .tpg{font-size:14.5px;border-left:3px solid var(--orange);background:#faf8f5;padding:7px 12px;margin:8px 0}
+  .tpg b{color:var(--orange-dark)}
+  .src{font-size:13px;color:var(--muted)}
+  a{color:var(--orange-dark)}
+
+  /* ---------- acknowledgement ---------- */
+  .ack{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+  .ack-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+  .ack-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-right:4px}
+  .st{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:#fff;color:#4d4a45;border-radius:3px;padding:4px 10px;cursor:pointer}
+  .st:hover{border-color:#c9c2b8}
+  .st[aria-pressed="true"][data-s="todo"]{background:var(--grey-bg);border-color:#bdb7ae;color:var(--anthra)}
+  .st[aria-pressed="true"][data-s="taken"]{background:var(--orange);border-color:var(--orange);color:#fff}
+  .st[aria-pressed="true"][data-s="na"]{background:#e9e7e3;border-color:#bdb7ae;color:#55524c}
+  .st[aria-pressed="true"][data-s="done"]{background:var(--green);border-color:var(--green);color:#fff}
+  .ack-more{display:none;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .ack.open .ack-more{display:flex}
+  .ack select,.ack input{font:inherit;font-size:14px;border:1px solid var(--line);border-radius:3px;padding:5px 8px;background:#fff}
+  .ack input{flex:1;min-width:180px}
+  .save{font:inherit;font-size:14px;font-weight:700;background:var(--anthra);color:#fff;border:0;border-radius:3px;padding:6px 14px;cursor:pointer}
+  .save:disabled{opacity:.5;cursor:default}
+  .ack-info{font-size:13px;color:var(--muted);margin-top:6px}
+  .ack-info b{color:var(--ink)}
+  .ack[data-locked] .st,.ack[data-locked] .ack-more{pointer-events:none;opacity:.55}
+
+  /* rows in "toujours chaud" */
+  .row{display:grid;grid-template-columns:1fr auto;gap:4px 14px;padding:12px 0;border-top:1px solid var(--line)}
+  .row:first-of-type{border-top:0;padding-top:0}
+  .row .what b{font-weight:700}
+  .row .sub{font-size:14px;color:var(--muted)}
+  .row .team{font-size:13px;color:var(--muted);text-align:right;white-space:nowrap}
+  .row .ack{grid-column:1/-1;margin-top:4px}
+
+  /* progress */
+  .progress{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--muted)}
+  .bar{flex:1;height:8px;background:var(--grey-bg);border-radius:4px;overflow:hidden;display:flex}
+  .bar i{display:block;height:100%}
+  .bar .b-done{background:var(--green)} .bar .b-taken{background:var(--orange)} .bar .b-na{background:#bdb7ae}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:8px}
+  .legend span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:0}
+  .lg-done::before{background:var(--green)} .lg-taken::before{background:var(--orange)} .lg-na::before{background:#bdb7ae} .lg-todo::before{background:var(--grey-bg);border:1px solid #cfc9c0}
+  .notice{font-size:13px;color:var(--muted);margin-top:8px}
+
+  .check{list-style:none;padding:0;margin:0}
+  .check li{padding:7px 0 7px 30px;position:relative;border-top:1px solid var(--line)}
+  .check li:first-child{border-top:0}
+  .check li::before{content:"";position:absolute;left:0;top:10px;width:16px;height:16px;border:2px solid var(--orange);border-radius:3px}
+  .check b{color:var(--orange-dark)}
+
+  footer{background:var(--anthra);color:#d8d5d0;padding:20px 32px 24px;font-size:13px}
+  footer .fbrand{font-family:"Barlow Condensed",sans-serif;font-size:18px;color:#fff;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+  footer .fbrand span{color:var(--orange)}
+
+  @media (max-width:580px){
+    .hd-top,section,footer{padding-left:18px;padding-right:18px}
+    h1{font-size:34px}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .stat:nth-child(2){border-right:0}
+    .row{grid-template-columns:1fr}
+    .row .team{text-align:left}
+  }
+
+  .whoami{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:14px 32px;background:var(--orange-soft);font-size:14.5px}
+  .whoami label{font-weight:600}
+  .whoami input{font:inherit;font-size:14.5px;border:1px solid var(--line);border-radius:3px;padding:5px 9px;min-width:200px}
+  #meSaved{color:var(--muted);font-size:13px}
+  @media (max-width:580px){.whoami{padding:12px 18px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="mail">
+
+<header>
+  <div class="hd-top">
+    <div class="brandline"><span class="pill">tpg</span> Pôle Infrastructure IT · Veille sécurité</div>
+    <h1>Le récap vulnérabilités</h1>
+    <div class="date" id="dateLabel">Chargement…</div>
+  </div>
+  <svg class="tram" viewBox="0 0 760 170" role="img" aria-label="Illustration d'un tram aux couleurs tpg devant le Salève et le jet d'eau">
+    <!-- Salève + skyline -->
+    <path d="M0 120 C70 96 120 92 170 100 C230 88 300 64 380 70 C450 74 500 92 560 88 C620 84 690 98 760 92 L760 170 L0 170Z" fill="#e06f00" opacity=".55"/>
+    <!-- jet d'eau -->
+    <g opacity=".55" fill="#fff">
+      <path d="M66 128 C64 90 63 52 66 18 C69 52 69 90 68 128Z"/>
+      <ellipse cx="66" cy="20" rx="6" ry="4"/>
+      <path d="M58 128 C60 112 72 112 76 128Z" opacity=".7"/>
+    </g>
+    <!-- caténaire -->
+    <line x1="0" y1="24" x2="760" y2="24" stroke="#fff" stroke-width="1.5" opacity=".9"/>
+    <line x1="120" y1="10" x2="120" y2="24" stroke="#fff" stroke-width="1.5" opacity=".6"/>
+    <line x1="720" y1="10" x2="720" y2="24" stroke="#fff" stroke-width="1.5" opacity=".6"/>
+    <!-- pantographe -->
+    <g stroke="#2b2b2b" stroke-width="2.5" fill="none" stroke-linecap="round">
+      <path d="M430 56 L452 38 L432 26"/>
+      <path d="M470 56 L452 38"/>
+      <line x1="420" y1="25" x2="446" y2="25"/>
+    </g>
+    <!-- caisse -->
+    <g>
+      <!-- section 1 (arrière) -->
+      <path d="M150 62 Q150 56 158 56 L318 56 L318 134 L156 134 Q150 134 150 128Z" fill="#fff"/>
+      <!-- section 2 -->
+      <rect x="322" y="56" width="236" height="78" fill="#fff"/>
+      <!-- section 3 (avant, nez arrondi) -->
+      <path d="M562 56 L680 56 Q706 56 716 74 L726 100 Q730 112 726 124 Q722 134 708 134 L562 134Z" fill="#fff"/>
+      <!-- soufflets -->
+      <rect x="318" y="60" width="4" height="72" fill="#3a3a3a"/>
+      <rect x="558" y="60" width="4" height="72" fill="#3a3a3a"/>
+      <!-- bande orange -->
+      <rect x="150" y="108" width="168" height="7" fill="#f07d00"/>
+      <rect x="322" y="108" width="236" height="7" fill="#f07d00"/>
+      <path d="M562 108 L727 108 L726 115 L562 115Z" fill="#f07d00"/>
+      <!-- jupe anthracite -->
+      <path d="M150 122 L318 122 L318 134 L156 134 Q150 134 150 128Z" fill="#2b2b2b"/>
+      <rect x="322" y="122" width="236" height="12" fill="#2b2b2b"/>
+      <path d="M562 122 L725 122 Q722 134 708 134 L562 134Z" fill="#2b2b2b"/>
+      <!-- toit -->
+      <rect x="170" y="50" width="120" height="7" rx="2" fill="#d9d6d1"/>
+      <rect x="350" y="50" width="180" height="7" rx="2" fill="#d9d6d1"/>
+      <rect x="580" y="50" width="90" height="7" rx="2" fill="#d9d6d1"/>
+      <!-- vitres -->
+      <g fill="#2b2b2b">
+        <rect x="160" y="66" width="34" height="34" rx="3"/>
+        <rect x="236" y="66" width="34" height="34" rx="3"/>
+        <rect x="276" y="66" width="34" height="34" rx="3"/>
+        <rect x="330" y="66" width="40" height="34" rx="3"/>
+        <rect x="414" y="66" width="40" height="34" rx="3"/>
+        <rect x="460" y="66" width="40" height="34" rx="3"/>
+        <rect x="570" y="66" width="40" height="34" rx="3"/>
+        <path d="M654 66 L684 66 Q700 66 708 80 L716 100 L654 100Z"/>
+      </g>
+      <!-- portes -->
+      <g fill="#3d3d3d">
+        <rect x="200" y="64" width="30" height="58" rx="2"/>
+        <rect x="376" y="64" width="32" height="58" rx="2"/>
+        <rect x="506" y="64" width="32" height="58" rx="2"/>
+        <rect x="616" y="64" width="32" height="58" rx="2"/>
+      </g>
+      <g stroke="#f07d00" stroke-width="1.5">
+        <line x1="215" y1="64" x2="215" y2="122"/>
+        <line x1="392" y1="64" x2="392" y2="122"/>
+        <line x1="522" y1="64" x2="522" y2="122"/>
+        <line x1="632" y1="64" x2="632" y2="122"/>
+      </g>
+      <!-- girouette -->
+      <rect x="664" y="58" width="34" height="6" rx="1" fill="#2b2b2b"/>
+      <rect x="667" y="59.5" width="16" height="3" fill="#f07d00"/>
+      <!-- phare -->
+      <ellipse cx="720" cy="118" rx="3.5" ry="2.5" fill="#fff6c8"/>
+    </g>
+    <!-- roues -->
+    <g fill="#1e1e1e">
+      <circle cx="190" cy="137" r="5"/><circle cx="280" cy="137" r="5"/>
+      <circle cx="420" cy="137" r="5"/><circle cx="460" cy="137" r="5"/>
+      <circle cx="600" cy="137" r="5"/><circle cx="690" cy="137" r="5"/>
+    </g>
+    <!-- voie -->
+    <rect x="0" y="141" width="760" height="4" fill="#2b2b2b"/>
+    <rect x="0" y="145" width="760" height="25" fill="#c96500"/>
+    <g fill="#b55a00">
+      <rect x="20" y="148" width="40" height="4"/><rect x="100" y="148" width="40" height="4"/><rect x="180" y="148" width="40" height="4"/>
+      <rect x="260" y="148" width="40" height="4"/><rect x="340" y="148" width="40" height="4"/><rect x="420" y="148" width="40" height="4"/>
+      <rect x="500" y="148" width="40" height="4"/><rect x="580" y="148" width="40" height="4"/><rect x="660" y="148" width="40" height="4"/>
+    </g>
+  </svg>
+</header>
+
+<div class="stats">
+  <div class="stat"><b id="s1">–</b><span>ajouts CISA KEV hier</span></div>
+  <div class="stat"><b id="s2">–</b><span>ajouts KEV cette semaine</span></div>
+  <div class="stat"><b id="s3">–</b><span>échéances KEV sous 7 j</span></div>
+  <div class="stat"><b id="statTaken">–</b><span>sujets pris en charge</span></div>
+</div>
+
+<section class="whoami">
+  <label for="me">Votre nom pour les acquittements :</label>
+  <input id="me" type="text" maxlength="60" placeholder="Prénom Nom">
+  <span id="meSaved"></span>
+</section>
+
+<section class="edito" id="secEdito"><h2>L'essentiel en 30 secondes</h2><div id="essentiel"></div></section>
+
+<section>
+  <h2>Suivi de prise en charge</h2>
+  <div class="progress"><div class="bar" id="bar"></div><span id="barTxt">Chargement…</span></div>
+  <div class="legend"><span class="lg-done">Corrigé</span><span class="lg-taken">Pris en charge</span><span class="lg-na">Non concerné</span><span class="lg-todo">À traiter</span></div>
+  <div class="notice" id="notice"></div>
+</section>
+
+<section id="secUne" hidden><h2 class="red">À la une</h2><div id="une"></div></section>
+<section id="secKev" hidden><h2 class="red">Exploitées activement — nouveautés KEV</h2><div id="kev"></div></section>
+<section id="secCorr" hidden><h2 class="amber">Nouveaux correctifs critiques</h2><div id="corr"></div></section>
+<section id="secChaud" hidden><h2 class="amber">Toujours chaud — rappels</h2><div id="chaud"></div></section>
+<section id="secCheck" hidden><h2 class="green">Checklist du jour pour le pôle</h2><ul class="check" id="check"></ul></section>
+
+<footer>
+  <div class="fbrand"><span>tpg</span> · Veille sécurité</div>
+  Récap quotidien du lundi au vendredi (le lundi couvre le week-end). Sources : CISA KEV, NCSC.ch, CERT-FR, avis éditeurs, Rapid7, Qualys, BleepingComputer, The Hacker News, SecurityWeek, SANS ISC.<br>
+  Les mentions « Pour nous » sont des pistes à valider.
+</footer>
+
+</div>
+</div>
+
+<script src="/app.js"></script>
+</body>
+</html>
