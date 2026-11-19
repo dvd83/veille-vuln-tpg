@@ -1,2 +1,4 @@
 User-agent: *
+Allow: /api/acks
+Allow: /data/
 Disallow: /
