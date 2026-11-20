@@ -425,5 +425,155 @@
         "reseau"
       ]
     }
+  ],
+  "top": [
+    {
+      "key": "CVE-2026-19868",
+      "title": "SonicWall SonicOS SSLVPN",
+      "cves": [
+        "CVE-2026-19868"
+      ],
+      "priority": "P1",
+      "kevDue": "2026-11-20",
+      "exploited": true,
+      "why": "Contournement de l'authentification SAML du VPN SSL, exploité.",
+      "action": "Si un VPN SSL SonicWall est utilisé : correctif éditeur aujourd'hui.",
+      "teams": [
+        "reseau"
+      ]
+    },
+    {
+      "key": "CVE-2026-90436",
+      "title": "Apache Axis via Confluence Data Center",
+      "cves": [
+        "CVE-2026-90436"
+      ],
+      "priority": "P1",
+      "kevDue": "2026-11-21",
+      "exploited": true,
+      "why": "RCE sans authentification, module Metasploit public, attaques en cours.",
+      "action": "Si Confluence DC : désactiver l'API distante XML-RPC/SOAP et appliquer le correctif Atlassian.",
+      "teams": [
+        "systemes"
+      ]
+    },
+    {
+      "key": "CVE-2026-123890",
+      "title": "VMware vCenter",
+      "cves": [
+        "CVE-2026-123890"
+      ],
+      "priority": "P1",
+      "exploited": true,
+      "why": "Contournement d'authentification CVSS 9.8, sans contournement ; zero-day selon Google.",
+      "action": "Relever les versions vCenter ; E-CAB si vulnérable (attention au chemin de montée VCF 9.1.1).",
+      "teams": [
+        "systemes"
+      ]
+    },
+    {
+      "key": "CVE-2026-124194",
+      "title": "Outlook",
+      "cves": [
+        "CVE-2026-124194"
+      ],
+      "priority": "P1",
+      "kevDue": "2026-11-24",
+      "exploited": true,
+      "why": "Fuite d'empreintes NTLM via un fichier message piégé, exploitée.",
+      "action": "Vérifier le déploiement des mises à jour Office de novembre.",
+      "teams": [
+        "sd",
+        "systemes"
+      ]
+    },
+    {
+      "key": "CVE-2026-125350",
+      "title": "Chrome",
+      "cves": [
+        "CVE-2026-125350"
+      ],
+      "priority": "P1",
+      "kevDue": "2026-11-24",
+      "exploited": true,
+      "why": "Use-after-free exploité dans le composant XML.",
+      "action": "Version 157.0.8103.50 minimum ; forcer le redémarrage des navigateurs.",
+      "teams": [
+        "sd"
+      ]
+    },
+    {
+      "key": "CVE-2026-114938",
+      "title": "Java4Shell (OpenJDK 17+)",
+      "cves": [
+        "CVE-2026-114938"
+      ],
+      "priority": "P1",
+      "exploited": false,
+      "why": "RCE sans authentification CVSSv4 9.2 ; chaînes connues pour Jira, Jenkins, Keycloak.",
+      "action": "Builds corrigés ; sinon -XX:-UseBASE64Intrinsics sur les JVM exposées.",
+      "teams": [
+        "systemes"
+      ]
+    },
+    {
+      "key": "CVE-2026-119618",
+      "title": "Apache httpd mod_http2",
+      "cves": [
+        "CVE-2026-119618"
+      ],
+      "priority": "P1",
+      "exploited": false,
+      "why": "RCE sans authentification CVSS 9.8 sur 2.4.55 à 2.4.70 avec HTTP/2.",
+      "action": "Passer en 2.4.71 ou désactiver HTTP/2 sur les serveurs exposés.",
+      "teams": [
+        "systemes"
+      ]
+    },
+    {
+      "key": "CVE-2026-115731",
+      "title": "Puppet Enterprise",
+      "cves": [
+        "CVE-2026-115731"
+      ],
+      "priority": "P1",
+      "kevDue": "2026-12-01",
+      "exploited": true,
+      "why": "RCE par désérialisation (CVSS 9.4), exploitée.",
+      "action": "Si Puppet est utilisé : appliquer les mises à jour Perforce du 03.11.",
+      "teams": [
+        "systemes"
+      ]
+    },
+    {
+      "key": "CVE-2024-10441",
+      "title": "Synology DSM",
+      "cves": [
+        "CVE-2024-10441"
+      ],
+      "priority": "P1",
+      "kevDue": "2026-11-21",
+      "exploited": true,
+      "why": "Ajoutée au KEV le 18.11, exploitée.",
+      "action": "Vérifier l'existence de NAS Synology (labo, sauvegarde secondaire) et les corriger.",
+      "teams": [
+        "systemes"
+      ]
+    },
+    {
+      "key": "CVE-2026-123158",
+      "title": "OpenSSH « SSHole »",
+      "cves": [
+        "CVE-2026-123158"
+      ],
+      "priority": "P1",
+      "exploited": true,
+      "why": "Exploitée, limitée à musl sans PAM (Alpine, OpenWrt, embarqué).",
+      "action": "Vérifier les images Alpine (OpenShift) et les équipements embarqués ; RHEL non concerné.",
+      "teams": [
+        "systemes",
+        "reseau"
+      ]
+    }
   ]
 }

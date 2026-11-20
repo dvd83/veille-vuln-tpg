@@ -180,6 +180,17 @@
   }
   .stat.unknown b{color:#9a9590}
   .stat.unknown span::after{content:" · non vérifié";color:#e0a100;font-weight:600}
+  .top{list-style:none;margin:0;padding:0;counter-reset:top}
+  .top li{display:grid;grid-template-columns:40px 1fr;gap:4px 12px;padding:11px 0;border-top:1px solid var(--line)}
+  .top li:first-child{border-top:0}
+  .top .rk{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:28px;line-height:1;color:var(--orange);text-align:right}
+  .top li.exploited .rk{color:var(--red)}
+  .top .t-head{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+  .top .t-head b{font-size:16.5px}
+  .top .t-why{color:#3b3934;font-size:15px;margin-top:3px}
+  .top .t-act{font-size:14.5px;margin-top:3px}
+  .top .t-act b{color:var(--orange-dark)}
+  .tag.expl{background:var(--red);color:#fff}
 </style>
 </head>
 <body>
@@ -293,6 +304,9 @@
 <nav class="tabbar"><span class="tab-label">Mon équipe :</span><div id="tabs" class="tabs"></div><span id="filterNote" class="filter-note"></span></nav>
 
 <section class="edito"><h2>L'essentiel en 30 secondes</h2><div id="essentiel"></div></section>
+<section id="secTop" data-filterable hidden><h2 class="red">Top 10 prioritaire</h2>
+  <p class="hp-intro">Tous sujets confondus, classés par urgence réelle : exploitation avérée, puis échéance KEV, puis exposition. Le détail est dans les rubriques plus bas.</p>
+  <ol class="top" id="top"></ol></section>
 <section id="secSemaine" hidden><h2>La semaine passée</h2><ul class="semaine" id="semaine"></ul></section>
 <section id="secSD" class="sd-box" hidden><h2>Pour le Service Desk</h2><div id="sd"></div></section>
 <section id="secUne" data-filterable hidden><h2 class="red">À la une</h2><div id="une"></div></section>

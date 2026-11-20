@@ -236,6 +236,26 @@
 
     (ed.essentiel || []).forEach(t => { const p = el('p'); p.appendChild(rich(t)); $('essentiel').appendChild(p); });
 
+    if (ed.top?.length) {
+      ed.top.forEach((t, i) => {
+        const li = el('li', t.exploited ? 'exploited' : null); setTeams(li, t.teams);
+        li.appendChild(el('div', 'rk', String(i + 1)));
+        const body = el('div');
+        const head = el('div', 't-head');
+        const pr = prio(t.priority); if (pr) head.appendChild(pr);
+        head.appendChild(el('b', null, t.title));
+        head.appendChild(cveLine(t.cves));
+        if (t.exploited) head.appendChild(el('span', 'tag expl', 'Exploitée'));
+        const kb = kevBadge(t.kevDue); if (kb) head.appendChild(kb);
+        head.appendChild(teamChips(t.teams));
+        body.appendChild(head);
+        if (t.why) { const w = el('div', 't-why'); w.appendChild(rich(t.why)); body.appendChild(w); }
+        if (t.action) { const a = el('div', 't-act'); a.appendChild(el('b', null, 'Action → ')); a.appendChild(rich(t.action)); body.appendChild(a); }
+        li.appendChild(body);
+        $('top').appendChild(li);
+      });
+      $('secTop').dataset.hasContent = '1'; $('secTop').hidden = false;
+    }
     if (ed.semaine?.length) {
       ed.semaine.forEach(t => { const li = el('li'); li.appendChild(rich(t)); $('semaine').appendChild(li); });
       $('secSemaine').hidden = false;
