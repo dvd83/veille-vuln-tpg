@@ -29,7 +29,7 @@
   function kevBadge(d) {
     if (!d) return null;
     const n = daysTo(d);
-    return el('span', 'tag kevdue' + (n <= 2 ? ' soon' : ''), 'Échéance KEV ' + dmy(d) + (n >= 0 ? ' (J-' + n + ')' : ' (dépassée)'));
+    return el('span', 'tag kevdue' + (n <= 2 ? ' soon' : ''), 'Échéance KEV ' + dmy(d) + (n > 0 ? ' (J-' + n + ')' : n === 0 ? ' (aujourd’hui)' : ' (dépassée)'));
   }
   function tags(list) { const t = el('div', 'tags'); (list || []).forEach(x => t.appendChild(el('span', 'tag ' + lvl(x.level), x.label))); return t; }
   function cveLine(cves) { const f = document.createDocumentFragment(); (cves || []).forEach(c => { f.appendChild(document.createTextNode(' ')); f.appendChild(el('span', 'cve', c)); }); return f; }
@@ -183,7 +183,7 @@
       const d = new Date(it.kevDue + 'T12:00:00');
       const date = el('div', 'kc-date');
       date.appendChild(el('b', null, dmy(it.kevDue)));
-      date.appendChild(el('span', null, WEEKDAYS[d.getDay()] + ' · J-' + n));
+      date.appendChild(el('span', null, WEEKDAYS[d.getDay()] + ' · ' + (n === 0 ? 'aujourd’hui' : 'J-' + n)));
       li.appendChild(date);
       const w = el('div', 'kc-what'); w.appendChild(el('b', null, it.title)); w.appendChild(cveLine(it.cves));
       li.appendChild(w);
