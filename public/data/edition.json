@@ -9,7 +9,8 @@
   },
   "essentiel": [
     "À la une : **VMware vCenter** (CVE-2026-123890, CVSS 9.8), contournement d'authentification sans contournement possible, corrigé sur toutes les branches supportées. Google indique une exploitation en zero-day avant le correctif ; Broadcom ne signale pas d'attaque.",
-    "**Apache Axis** arrive à échéance KEV demain (21.11) avec un module Metasploit public. **Java4Shell** : un contournement existe en attendant les builds Red Hat, et **Apache httpd 2.4.71** corrige une RCE critique dans mod_http2. Côté réseau : l'échéance KEV de **SonicWall SSLVPN** (CVE-2026-19868) tombe aujourd'hui."
+    "**Apache Axis** arrive à échéance KEV demain (21.11) avec un module Metasploit public. **Java4Shell** : un contournement existe en attendant les builds Red Hat, et **Apache httpd 2.4.71** corrige une RCE critique dans mod_http2. Côté réseau : l'échéance KEV de **SonicWall SSLVPN** (CVE-2026-19868) tombe aujourd'hui.",
+    "Ajout de 10h50 : **PHP** a publié le 19.11 des correctifs pour 18 CVE dont 7 critiques (CVE-2026-115560, CVE-2026-129289) ; les paquets Red Hat ne sont pas encore disponibles."
   ],
   "une": {
     "key": "CVE-2026-123890",
@@ -194,6 +195,54 @@
       "teams": [
         "systemes"
       ]
+    },
+    {
+      "key": "PHP-2026-11-19",
+      "title": "PHP — mise à jour de sécurité du 19.11 (18 CVE, dont 7 critiques)",
+      "cves": [
+        "CVE-2026-115560",
+        "CVE-2026-129289"
+      ],
+      "priority": "P2",
+      "epss": "NV",
+      "tags": [
+        {
+          "label": "CVSS 9.2",
+          "level": "red"
+        },
+        {
+          "label": "PoC public (115560)",
+          "level": "amber"
+        },
+        {
+          "label": "Non exploitée à ce jour",
+          "level": "grey"
+        }
+      ],
+      "body": "PHP 8.5.13, 8.4.28, 8.3.37 et 8.2.36 corrigent 18 CVE sur toutes les branches supportées. **CVE-2026-115560** (RCE via la progression d'upload des sessions) ne touche que les applications qui basculent session.serialize_handler vers « php » à l'exécution ; un PoC est public depuis octobre. **CVE-2026-129289** (PHP-FPM) permet du request smuggling, avec exécution de code démontrée quand les connexions vers FPM sont réutilisées. Les corrections d'octobre (PHP2Shell) ne couvrent pas ces failles. Chez Red Hat (RHEL 8, 9, 10), pas encore de paquet corrigé au 20.11.",
+      "fix": "PHP 8.5.13 / 8.4.28 / 8.3.37 / 8.2.36 ; en attendant (RHEL) : session.upload_progress.enabled=0 dans php.ini ou le pool FPM + redémarrage des workers, et pas de réutilisation des connexions vers FPM",
+      "pourNous": "Si des serveurs ou conteneurs PHP sont utilisés : inventorier les versions, appliquer le contournement sur RHEL en attendant l'errata, vérifier que PHP-FPM n'est pas joignable directement.",
+      "teams": [
+        "systemes"
+      ],
+      "sources": [
+        {
+          "label": "The Hacker News",
+          "url": "https://thehackernews.com/2026/11/php-fixes-7-critical-flaws-including.html"
+        },
+        {
+          "label": "Aikido",
+          "url": "https://www.aikido.dev/blog/php-security-release-19-november-2026-cve-2026-115560"
+        },
+        {
+          "label": "ComputingForGeeks (statut des distributions)",
+          "url": "https://computingforgeeks.com/php-cve-2026-115560-check-patch/"
+        },
+        {
+          "label": "Monarx",
+          "url": "https://www.monarx.com/press-news/php-security-release-november-19-2026-critical-vulnerabilities-and-recommended-actions"
+        }
+      ]
     }
   ],
   "chaud": [
@@ -353,7 +402,7 @@
       "note": "KEV 10.11 — échéance 24.11"
     }
   ],
-  "limites": "Comptages KEV tirés du catalogue officiel (v2026.11.18). EPSS non vérifiés auprès de FIRST. Édition produite à 08h45 au lieu de 07h47.",
+  "limites": "Comptages KEV tirés du catalogue officiel (v2026.11.18). EPSS non vérifiés auprès de FIRST. Édition produite à 08h45 au lieu de 07h47. Correctif : la mise à jour PHP du 19.11 manquait à la première publication de l'édition (ajoutée à 10h50).",
   "checklist": [
     {
       "team": "Systèmes",
@@ -372,6 +421,13 @@
     {
       "team": "Systèmes",
       "text": "si Confluence Data Center est utilisé : désactiver l'API distante XML-RPC/SOAP (Apache Axis, échéance KEV 21.11).",
+      "teams": [
+        "systemes"
+      ]
+    },
+    {
+      "team": "Systèmes",
+      "text": "si PHP est utilisé : versions 8.x à jour, ou session.upload_progress.enabled=0 sur RHEL en attendant l'errata.",
       "teams": [
         "systemes"
       ]
@@ -531,6 +587,21 @@
       ]
     },
     {
+      "key": "PHP-2026-11-19",
+      "title": "PHP (8.2 à 8.5)",
+      "cves": [
+        "CVE-2026-115560",
+        "CVE-2026-129289"
+      ],
+      "priority": "P2",
+      "exploited": false,
+      "why": "18 CVE corrigées le 19.11 dont 7 critiques ; RCE sous conditions, PoC public ; pas encore de paquet RHEL.",
+      "action": "Si PHP est utilisé : mettre à jour, sinon session.upload_progress.enabled=0 et FPM non exposé.",
+      "teams": [
+        "systemes"
+      ]
+    },
+    {
       "key": "CVE-2026-115731",
       "title": "Puppet Enterprise",
       "cves": [
@@ -558,21 +629,6 @@
       "action": "Vérifier l'existence de NAS Synology (labo, sauvegarde secondaire) et les corriger.",
       "teams": [
         "systemes"
-      ]
-    },
-    {
-      "key": "CVE-2026-123158",
-      "title": "OpenSSH « SSHole »",
-      "cves": [
-        "CVE-2026-123158"
-      ],
-      "priority": "P1",
-      "exploited": true,
-      "why": "Exploitée, limitée à musl sans PAM (Alpine, OpenWrt, embarqué).",
-      "action": "Vérifier les images Alpine (OpenShift) et les équipements embarqués ; RHEL non concerné.",
-      "teams": [
-        "systemes",
-        "reseau"
       ]
     }
   ]
