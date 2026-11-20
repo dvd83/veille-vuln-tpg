@@ -8,6 +8,14 @@ Jamais : nom de serveur, adresse IP, version installée chez nous, résultat d'i
 Les lignes `pourNous` sont des vérifications conditionnelles (« si X est utilisé, vérifier Y »), jamais une affirmation sur ce que nous avons.
 Le suivi des actions se fait dans Jira (bouton « Préparer le changement Jira » qui copie un texte de ticket).
 
+## Sources structurées (`scripts/collect.py`)
+Le script interroge deux flux officiels publiés sur GitHub (seul accès réseau fiable depuis la tâche planifiée) :
+- **Catalogue CISA KEV** — `cisagov/kev-data` : ajouts, échéances (`dueDate`), statistiques.
+- **Liste officielle des CVE** — `CVEProject/cvelistV5` : clone partiel des seules fiches ajoutées ou modifiées dans la fenêtre (via `cves/deltaLog.json`), avec CVSS, éditeur, produit, versions et références.
+Il produit un fichier de candidats **hors du site public** (CVE critiques ≥ 9, CVE ≥ 7 sur la liste de surveillance `WATCH`, CVE de la fenêtre déjà au KEV).
+`python3 -I scripts/collect.py --work /tmp/veille-src --since <AAAA-MM-JJ>T07:00:00Z --out /tmp/candidats.json`
+La recherche web sert ensuite au contexte (exploitation, contournements, statut Red Hat), pas à la découverte.
+
 ## Fichiers
 - `public/index.html`, `public/app.js` : la page (charte tpg, tram en en-tête). Config Jira en tête de `app.js` (`CONFIG.jiraCreateUrl`).
 - `public/data/edition.json` : l'édition du jour.

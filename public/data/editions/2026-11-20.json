@@ -10,7 +10,7 @@
   "essentiel": [
     "À la une : **VMware vCenter** (CVE-2026-123890, CVSS 9.8), contournement d'authentification sans contournement possible, corrigé sur toutes les branches supportées. Google indique une exploitation en zero-day avant le correctif ; Broadcom ne signale pas d'attaque.",
     "**Apache Axis** arrive à échéance KEV demain (21.11) avec un module Metasploit public. **Java4Shell** : un contournement existe en attendant les builds Red Hat, et **Apache httpd 2.4.71** corrige une RCE critique dans mod_http2. Côté réseau : l'échéance KEV de **SonicWall SSLVPN** (CVE-2026-19868) tombe aujourd'hui.",
-    "Ajout de 10h50 : **PHP** a publié le 19.11 des correctifs pour 18 CVE dont 7 critiques (CVE-2026-115560, CVE-2026-129289) ; les paquets Red Hat ne sont pas encore disponibles."
+    "Ajouts de 10h50 et 11h05 : **PHP** (18 CVE corrigées le 19.11, paquets Red Hat pas encore disponibles), **Splunk** (contournement d'authentification), **Dell PowerStore T** et **Mitel MiCollab** (exécution sans authentification) — repérés grâce au nouveau flux officiel des CVE."
   ],
   "une": {
     "key": "CVE-2026-123890",
@@ -243,6 +243,106 @@
           "url": "https://www.monarx.com/press-news/php-security-release-november-19-2026-critical-vulnerabilities-and-recommended-actions"
         }
       ]
+    },
+    {
+      "key": "SPLUNK-2026-11-19",
+      "title": "Splunk Enterprise et SOAR — contournements d'authentification et RCE",
+      "cves": [
+        "CVE-2026-76536",
+        "CVE-2026-76535",
+        "CVE-2026-131253"
+      ],
+      "priority": "P1",
+      "epss": "NV",
+      "tags": [
+        {
+          "label": "CVSS 9.4 sans authentification",
+          "level": "red"
+        },
+        {
+          "label": "Non au KEV",
+          "level": "grey"
+        }
+      ],
+      "body": "Splunk Enterprise accepte un secret partagé vide : un attaquant non authentifié peut lire et modifier la configuration de clustering via l'API REST (CVE-2026-76536, 9.4) ou lancer des recherches SPL via RapidDiag (CVE-2026-76535, 9.1). Splunk SOAR < 8.8.0 permet une exécution de code via l'App Wizard pour un utilisateur disposant de certains droits (CVE-2026-131253, 9.9).",
+      "fix": "Splunk Enterprise 10.6.1 / 10.4.5 / 10.2.9 / 10.0.12 / 9.4.17 ; Splunk SOAR 8.8.0 ; Splunk ES 8.7.0",
+      "pourNous": "Si Splunk est utilisé (SIEM) : vérifier les versions, ne pas exposer l'API de gestion (port 8089) hors du réseau d'admin, et définir un secret de clustering.",
+      "teams": [
+        "systemes"
+      ],
+      "sources": [
+        {
+          "label": "Splunk SVD-2026-1103",
+          "url": "https://advisory.splunk.com/advisories/SVD-2026-1103"
+        },
+        {
+          "label": "Splunk SVD-2026-1108",
+          "url": "https://advisory.splunk.com/advisories/SVD-2026-1108"
+        }
+      ]
+    },
+    {
+      "key": "DELL-DSA-2026-479",
+      "title": "Dell PowerStore T — SDNAS : accès fichiers et exécution de code sans authentification",
+      "cves": [
+        "CVE-2026-116439",
+        "CVE-2026-116440"
+      ],
+      "priority": "P1",
+      "epss": "NV",
+      "tags": [
+        {
+          "label": "CVSS 9.8",
+          "level": "red"
+        },
+        {
+          "label": "Non au KEV",
+          "level": "grey"
+        }
+      ],
+      "body": "Le composant NAS (SDNAS) de PowerStore T permet à un attaquant non authentifié de lire, modifier ou supprimer des fichiers sur le nœud NAS (traversée de répertoire) ou d'y provoquer un déni de service, voire une exécution de code (dépassement de tampon).",
+      "fix": "PowerStore T 5.1.0.0-2798105 ou ultérieur (DSA-2026-479)",
+      "pourNous": "Si des baies PowerStore T avec fonctions NAS sont utilisées : vérifier la version et restreindre l'accès réseau aux interfaces NAS en attendant.",
+      "teams": [
+        "systemes"
+      ],
+      "sources": [
+        {
+          "label": "Dell DSA-2026-479",
+          "url": "https://www.dell.com/support/kbdoc/en-us/000527640/dsa-2026-479-dell-powerstore-t-security-update-for-multiple-vulnerabilities"
+        }
+      ]
+    },
+    {
+      "key": "CVE-2026-133323",
+      "title": "Mitel MiCollab — injection de commandes sans authentification (AWV)",
+      "cves": [
+        "CVE-2026-133323"
+      ],
+      "priority": "P1",
+      "epss": "NV",
+      "tags": [
+        {
+          "label": "CVSS 10.0",
+          "level": "red"
+        },
+        {
+          "label": "Non au KEV",
+          "level": "grey"
+        }
+      ],
+      "body": "Le composant de conférence audio/web/vidéo (AWV) de MiCollab jusqu'à 10.3 (10.3.0.18) permet à un attaquant non authentifié d'exécuter des commandes sur le système. MiCollab a déjà été ciblé par des attaques par le passé.",
+      "fix": "Selon l'avis Mitel MISA-2026-0012",
+      "pourNous": "Si MiCollab est utilisé (téléphonie / collaboration) : appliquer le correctif Mitel, ne pas exposer l'interface AWV sur internet.",
+      "teams": [
+        "reseau"
+      ],
+      "sources": [
+        {
+          "label": "Mitel MISA-2026-0012",
+          "url": "https://www.mitel.com/support/security-advisories/mitel-product-security-advisory-misa-2026-0012"
+        }
+      ]
     }
   ],
   "chaud": [
@@ -378,6 +478,18 @@
   ],
   "horsPerimetre": [
     {
+      "cve": "CVE-2026-132891",
+      "product": "JetBrains TeamCity",
+      "cvss": "9,8",
+      "note": "RCE via pull requests externes — corrigé en 2026.2 / 2026.1.4 / 2025.11.8"
+    },
+    {
+      "cve": "CVE-2026-84236",
+      "product": "IBM Guardium Data Protection",
+      "cvss": "9,8",
+      "note": "Désérialisation et injection SQL (avec CVE-2026-87977)"
+    },
+    {
       "cve": "CVE-2026-129448",
       "product": "Apache Roller",
       "cvss": "9,8",
@@ -402,7 +514,7 @@
       "note": "KEV 10.11 — échéance 24.11"
     }
   ],
-  "limites": "Comptages KEV tirés du catalogue officiel (v2026.11.18). EPSS non vérifiés auprès de FIRST. Édition produite à 08h45 au lieu de 07h47. Correctif : la mise à jour PHP du 19.11 manquait à la première publication de l'édition (ajoutée à 10h50).",
+  "limites": "Comptages KEV et CVE tirés des flux officiels (cisagov/kev-data v2026.11.18, CVEProject/cvelistV5). EPSS non vérifiés auprès de FIRST. Édition complétée à 10h50 et 11h05 (PHP, Splunk, Dell, Mitel manquaient à la première publication).",
   "checklist": [
     {
       "team": "Systèmes",
@@ -514,6 +626,21 @@
       ]
     },
     {
+      "key": "CVE-2024-10441",
+      "title": "Synology DSM",
+      "cves": [
+        "CVE-2024-10441"
+      ],
+      "priority": "P1",
+      "kevDue": "2026-11-21",
+      "exploited": true,
+      "why": "Ajoutée au KEV le 18.11, exploitée.",
+      "action": "Vérifier l'existence de NAS Synology (labo, sauvegarde secondaire) et les corriger.",
+      "teams": [
+        "systemes"
+      ]
+    },
+    {
       "key": "CVE-2026-123890",
       "title": "VMware vCenter",
       "cves": [
@@ -559,6 +686,21 @@
       ]
     },
     {
+      "key": "CVE-2026-115731",
+      "title": "Puppet Enterprise",
+      "cves": [
+        "CVE-2026-115731"
+      ],
+      "priority": "P1",
+      "kevDue": "2026-12-01",
+      "exploited": true,
+      "why": "RCE par désérialisation (CVSS 9.4), exploitée.",
+      "action": "Si Puppet est utilisé : appliquer les mises à jour Perforce du 03.11.",
+      "teams": [
+        "systemes"
+      ]
+    },
+    {
       "key": "CVE-2026-114938",
       "title": "Java4Shell (OpenJDK 17+)",
       "cves": [
@@ -600,36 +742,11 @@
       "teams": [
         "systemes"
       ]
-    },
-    {
-      "key": "CVE-2026-115731",
-      "title": "Puppet Enterprise",
-      "cves": [
-        "CVE-2026-115731"
-      ],
-      "priority": "P1",
-      "kevDue": "2026-12-01",
-      "exploited": true,
-      "why": "RCE par désérialisation (CVSS 9.4), exploitée.",
-      "action": "Si Puppet est utilisé : appliquer les mises à jour Perforce du 03.11.",
-      "teams": [
-        "systemes"
-      ]
-    },
-    {
-      "key": "CVE-2024-10441",
-      "title": "Synology DSM",
-      "cves": [
-        "CVE-2024-10441"
-      ],
-      "priority": "P1",
-      "kevDue": "2026-11-21",
-      "exploited": true,
-      "why": "Ajoutée au KEV le 18.11, exploitée.",
-      "action": "Vérifier l'existence de NAS Synology (labo, sauvegarde secondaire) et les corriger.",
-      "teams": [
-        "systemes"
-      ]
     }
-  ]
+  ],
+  "volume": {
+    "published": 1436,
+    "critical": 57,
+    "source": "liste officielle des CVE (CVEProject), fenêtre 19.11 08h → 20.11"
+  }
 }
