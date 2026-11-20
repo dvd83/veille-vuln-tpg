@@ -1,0 +1,14 @@
+{
+  "editions": [
+    {
+      "date": "2026-11-19",
+      "dateLabel": "Jeudi 19 novembre 2026",
+      "une": "Java4Shell (OpenJDK)"
+    },
+    {
+      "date": "2026-11-20",
+      "dateLabel": "Vendredi 20 novembre 2026",
+      "une": "VMware vCenter — contournement d'authentification"
+    }
+  ]
+}

@@ -130,6 +130,54 @@
   .limits{font-size:13px;color:var(--muted);background:#faf8f5}
   .limits div{margin-bottom:5px}
   @media (max-width:580px){table.hp td:nth-child(4){display:none}}
+
+  .banner{padding:10px 32px;font-size:14.5px;font-weight:600}
+  .banner.stale{background:#fff3df;color:#7a4300;border-bottom:2px solid #e0a100}
+  .banner.archive{background:#eef1f6;color:#2b3a55}
+  .banner a{color:inherit;margin-left:6px}
+  #pubInfo{opacity:.85;font-size:14px}
+  .tabbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:12px 32px;border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:5}
+  .tab-label{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+  .tabs{display:flex;gap:6px;flex-wrap:wrap}
+  .tab{font:inherit;font-size:14px;font-weight:600;border:1px solid var(--line);background:#fff;color:#4d4a45;border-radius:999px;padding:4px 14px;cursor:pointer}
+  .tab[aria-pressed="true"]{background:var(--orange);border-color:var(--orange);color:#fff}
+  .filter-note{font-size:13px;color:var(--muted)}
+  .card-foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+  .card-foot .src{flex:1;min-width:180px}
+  .teams{display:inline-flex;gap:4px;flex-wrap:wrap}
+  .team-chip{font-size:11.5px;font-weight:600;background:var(--grey-bg);color:#4d4a45;border-radius:999px;padding:1px 8px}
+  .jira-btn{font:inherit;font-size:13px;font-weight:700;background:var(--anthra);color:#fff;border:0;border-radius:3px;padding:5px 12px;cursor:pointer;white-space:nowrap}
+  .jira-btn:hover{background:#000}
+  .row{grid-template-columns:1fr auto}
+  .row-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+  .sd-box{background:#f2f7fd}
+  .sd-box h2::before{background:#1d5fa8}
+  .sd-item{background:#fff;border:1px solid #d6e3f3;border-radius:4px;padding:12px 16px;margin-bottom:10px}
+  .sd-item h3{margin:0 0 4px;font-size:16.5px}
+  .sd-item p{margin:0 0 6px}
+  .sd-item blockquote{margin:6px 0 0;padding:8px 12px;background:#f7fafe;border-left:3px solid #1d5fa8;font-size:14.5px}
+  .q-label{font-weight:700;color:#1d5fa8}
+  .semaine{margin:0;padding-left:18px} .semaine li{margin-bottom:6px}
+  .kevcal{list-style:none;margin:0;padding:0}
+  .kevcal li{display:grid;grid-template-columns:110px 1fr;gap:12px;padding:9px 0;border-top:1px solid var(--line);align-items:start}
+  .kevcal li:first-child{border-top:0}
+  .kc-date b{display:block;font-family:"Barlow Condensed",sans-serif;font-size:22px;line-height:1;color:var(--anthra)}
+  .kc-date span{font-size:12.5px;color:var(--muted)}
+  .kevcal li.soon .kc-date b{color:var(--red)}
+  .glossary details{font-size:14.5px}
+  .glossary summary{cursor:pointer;font-family:"Barlow Condensed",sans-serif;font-size:19px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;color:var(--anthra)}
+  .glossary dl{display:grid;grid-template-columns:110px 1fr;gap:8px 14px;margin:14px 0 0}
+  .glossary dt{font-weight:700} .glossary dd{margin:0;color:#3b3934}
+  .archive{margin:0;padding-left:18px;font-size:14.5px} .archive li{margin-bottom:4px} .archive li.current a{font-weight:700;color:var(--ink)}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--anthra);color:#fff;padding:9px 16px;border-radius:4px;font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:20}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  [hidden]{display:none!important}
+  @media (max-width:580px){
+    .tabbar,.banner{padding-left:18px;padding-right:18px}
+    .row{grid-template-columns:1fr} .row-right{align-items:flex-start;flex-direction:row;flex-wrap:wrap}
+    .kevcal li{grid-template-columns:80px 1fr}
+    .glossary dl{grid-template-columns:1fr} .glossary dd{margin-bottom:6px}
+  }
 </style>
 </head>
 <body>
@@ -140,7 +188,7 @@
   <div class="hd-top">
     <div class="brandline"><span class="pill">tpg</span> Pôle Infrastructure IT · Veille sécurité</div>
     <h1>Le récap vulnérabilités</h1>
-    <div class="date" id="dateLabel">Chargement…</div>
+    <div class="date"><span id="dateLabel">Chargement…</span><span id="pubInfo"></span></div>
   </div>
   <svg class="tram" viewBox="0 0 760 170" role="img" aria-label="Illustration d'un tram aux couleurs tpg devant le Salève et le jet d'eau">
     <!-- Salève + skyline -->
@@ -231,49 +279,61 @@
   </svg>
 </header>
 
+<div class="banner" id="banner" hidden></div>
+
 <div class="stats">
   <div class="stat"><b id="s1">–</b><span>ajouts CISA KEV hier</span></div>
   <div class="stat"><b id="s2">–</b><span>ajouts KEV cette semaine</span></div>
   <div class="stat"><b id="s3">–</b><span>échéances KEV sous 7 j</span></div>
-  <div class="stat"><b id="statTaken">–</b><span>sujets pris en charge</span></div>
+  <div class="stat"><b id="s4">–</b><span>sujets P1 du jour</span></div>
 </div>
 
-<section class="whoami">
-  <label for="me">Votre nom pour les acquittements :</label>
-  <input id="me" type="text" maxlength="60" placeholder="Prénom Nom">
-  <span id="meSaved"></span>
-</section>
+<nav class="tabbar"><span class="tab-label">Mon équipe :</span><div id="tabs" class="tabs"></div><span id="filterNote" class="filter-note"></span></nav>
 
-<section class="edito" id="secEdito"><h2>L'essentiel en 30 secondes</h2><div id="essentiel"></div></section>
-
-<section>
-  <h2>Suivi de prise en charge</h2>
-  <div class="progress"><div class="bar" id="bar"></div><span id="barTxt">Chargement…</span></div>
-  <div class="legend"><span class="lg-done">Corrigé</span><span class="lg-taken">Pris en charge</span><span class="lg-na">Non concerné</span><span class="lg-todo">À traiter</span></div>
-  <div class="notice" id="notice"></div>
-</section>
-
-<section id="secUne" hidden><h2 class="red">À la une</h2><div id="une"></div></section>
-<section id="secKev" hidden><h2 class="red">Exploitées activement — nouveautés KEV</h2><div id="kev"></div></section>
-<section id="secCorr" hidden><h2 class="amber">Nouveaux correctifs critiques</h2><div id="corr"></div></section>
-<section id="secChaud" hidden><h2 class="amber">Toujours chaud — rappels</h2><div id="chaud"></div></section>
+<section class="edito"><h2>L'essentiel en 30 secondes</h2><div id="essentiel"></div></section>
+<section id="secSemaine" hidden><h2>La semaine passée</h2><ul class="semaine" id="semaine"></ul></section>
+<section id="secSD" class="sd-box" hidden><h2>Pour le Service Desk</h2><div id="sd"></div></section>
+<section id="secUne" data-filterable hidden><h2 class="red">À la une</h2><div id="une"></div></section>
+<section id="secKev" data-filterable hidden><h2 class="red">Exploitées activement — nouveautés KEV</h2><div id="kev"></div></section>
+<section id="secCorr" data-filterable hidden><h2 class="amber">Nouveaux correctifs critiques</h2><div id="corr"></div></section>
+<section id="secChaud" data-filterable hidden><h2 class="amber">Toujours chaud — rappels</h2><div id="chaud"></div></section>
+<section id="secCal" data-filterable hidden><h2>Calendrier des échéances KEV — 14 jours</h2>
+  <p class="hp-intro">Dates limites fixées par la CISA aux agences fédérales US : un bon repère de l'urgence réelle, à caler sur le CAB du mardi.</p>
+  <ol class="kevcal" id="kevcal"></ol></section>
+<section id="secCheck" data-filterable hidden><h2 class="green">Checklist du jour pour le pôle</h2><ul class="check" id="check"></ul></section>
 <section id="secHors" hidden><h2>Vu mais hors périmètre probable</h2>
-  <p class="hp-intro">CVE critiques du jour sur des produits a priori absents des tpg — listées pour mémoire. Signalez-le si l'un d'eux est utilisé.</p>
-  <table class="hp"><tbody id="hors"></tbody></table>
-</section>
-<section id="secCheck" hidden><h2 class="green">Checklist du jour pour le pôle</h2><ul class="check" id="check"></ul></section>
+  <p class="hp-intro">CVE critiques du jour sur des produits a priori peu répandus dans une infra comme la nôtre — listées pour mémoire.</p>
+  <table class="hp"><tbody id="hors"></tbody></table></section>
 
-<section class="limits"><div id="volume"></div><div id="limites"></div><div class="legend-prio"><span class="prio prio-p1">P1</span> exploitation confirmée ou risque de compromission majeur · <span class="prio prio-p2">P2</span> exploitation sous conditions ou avec privilèges · « NV » = non vérifié</div></section>
+<section class="glossary">
+  <details><summary>Glossaire — comprendre les badges</summary>
+  <dl>
+    <dt><span class="prio prio-p1">P1</span></dt><dd>Exploitation confirmée, ou risque de compromission majeur (exécution de code sans authentification sur un composant exposé). À traiter en priorité, E-CAB si besoin.</dd>
+    <dt><span class="prio prio-p2">P2</span></dt><dd>Exploitation possible seulement sous conditions (accès réseau interne, compte, privilèges). À planifier au CAB.</dd>
+    <dt>CVE</dt><dd>Identifiant public unique d'une vulnérabilité (ex. CVE-2026-123890).</dd>
+    <dt>CVSS</dt><dd>Note de gravité de 0 à 10, calculée sur la faille elle-même ; 9 et plus = critique. Ne dit pas si elle est exploitée.</dd>
+    <dt>KEV</dt><dd>Catalogue de la CISA (agence cyber américaine) des failles dont l'exploitation réelle est prouvée. Le meilleur signal d'urgence.</dd>
+    <dt>Échéance KEV</dt><dd>Date limite imposée aux agences fédérales US pour corriger. Nous l'utilisons comme repère, pas comme obligation.</dd>
+    <dt>EPSS</dt><dd>Probabilité (FIRST) qu'une faille soit exploitée dans les 30 prochains jours.</dd>
+    <dt>Zero-day</dt><dd>Faille exploitée avant que l'éditeur ne publie un correctif.</dd>
+    <dt>RCE</dt><dd>Exécution de code à distance : l'attaquant fait tourner ce qu'il veut sur la machine.</dd>
+    <dt>NV</dt><dd>Non vérifié dans les sources consultées : l'information manque, elle n'est pas estimée.</dd>
+  </dl></details>
+</section>
+
+<section id="secArch" hidden><h2>Éditions précédentes</h2><ul class="archive" id="archive"></ul></section>
+
+<section class="limits"><div id="volume"></div><div id="limites"></div>
+  <div>Cette page ne contient que des informations publiques (avis éditeurs, CISA, presse). Elle ne décrit pas l'état du SI des tpg : le suivi des actions se fait dans Jira.</div></section>
 
 <footer>
   <div class="fbrand"><span>tpg</span> · Veille sécurité</div>
-  Récap quotidien du lundi au vendredi (le lundi couvre le week-end). Sources : CISA KEV, NCSC.ch, CERT-FR, avis éditeurs, Rapid7, Qualys, BleepingComputer, The Hacker News, SecurityWeek, SANS ISC.<br>
-  Les mentions « Pour nous » sont des pistes à valider.
+  Récap quotidien du lundi au vendredi (le lundi couvre le week-end et résume la semaine). Sources : CISA KEV, CVE Now, NVD, FIRST EPSS, NCSC.ch, CERT-FR, avis éditeurs, Rapid7, Qualys, BleepingComputer, The Hacker News, SecurityWeek, SANS ISC.
 </footer>
 
 </div>
 </div>
-
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="/app.js"></script>
 </body>
 </html>

@@ -40,6 +40,9 @@
         "label": "The Hacker News",
         "url": "https://thehackernews.com/2026/11/critical-vmware-vcenter-flaw-cvss-98.html"
       }
+    ],
+    "teams": [
+      "systemes"
     ]
   },
   "kev": [
@@ -74,6 +77,9 @@
           "label": "SecurityWeek",
           "url": "https://www.securityweek.com/critical-apache-roller-axis-vulnerabilities-exploited-in-attacks/"
         }
+      ],
+      "teams": [
+        "systemes"
       ]
     },
     {
@@ -106,6 +112,9 @@
           "label": "Security Affairs",
           "url": "https://securityaffairs.com/203377/hacking/u-s-cisa-adds-perforce-puppet-enterprise-flaw-to-its-known-exploited-vulnerabilities-catalog.html"
         }
+      ],
+      "teams": [
+        "systemes"
       ]
     }
   ],
@@ -144,6 +153,9 @@
           "label": "Qualys",
           "url": "https://blog.qualys.com/vulnerabilities-threat-research/2026/11/17/how-to-find-mitigate-and-patch-the-critical-java4shell-flaw-cve-2026-114938-now"
         }
+      ],
+      "teams": [
+        "systemes"
       ]
     },
     {
@@ -176,6 +188,9 @@
           "label": "Red Hat",
           "url": "https://access.redhat.com/security/cve/CVE-2026-119618"
         }
+      ],
+      "teams": [
+        "systemes"
       ]
     }
   ],
@@ -193,7 +208,11 @@
         "level": "red"
       },
       "sub": "Fuite d'empreintes NTLM via un fichier message forgé ; seul zero-day du Patch Tuesday.",
-      "team": "Exchange · Poste de travail"
+      "team": "Exchange · Poste de travail",
+      "teams": [
+        "sd",
+        "systemes"
+      ]
     },
     {
       "key": "CVE-2026-125350",
@@ -208,7 +227,10 @@
         "level": "red"
       },
       "sub": "Use-after-free dans le composant XML, exploité ; corrigé en 157.0.8103.50.",
-      "team": "Poste de travail"
+      "team": "Poste de travail",
+      "teams": [
+        "sd"
+      ]
     },
     {
       "key": "CVE-2026-123158",
@@ -222,7 +244,11 @@
         "level": "red"
       },
       "sub": "musl sans PAM (Alpine, OpenWrt, embarqué) ; RHEL non concerné.",
-      "team": "Systèmes · Réseau"
+      "team": "Systèmes · Réseau",
+      "teams": [
+        "systemes",
+        "reseau"
+      ]
     },
     {
       "key": "CVE-2026-116928",
@@ -237,7 +263,10 @@
         "level": "amber"
       },
       "sub": "Cumulatif de novembre, contrôleurs de domaine en priorité.",
-      "team": "Systèmes"
+      "team": "Systèmes",
+      "teams": [
+        "systemes"
+      ]
     },
     {
       "key": "FORTINET-2026-11-10",
@@ -252,7 +281,10 @@
         "level": "amber"
       },
       "sub": "FortiOS OSPF et BGP.",
-      "team": "Réseau"
+      "team": "Réseau",
+      "teams": [
+        "reseau"
+      ]
     },
     {
       "key": "KEV-2026-11-18-autres",
@@ -269,7 +301,10 @@
         "level": "red"
       },
       "sub": "Échéance KEV 02.12 pour LiteLLM ; vérifier tout NAS Synology.",
-      "team": "Stockage · SecOps"
+      "team": "Stockage · SecOps",
+      "teams": [
+        "systemes"
+      ]
     }
   ],
   "horsPerimetre": [
@@ -292,27 +327,57 @@
       "note": "Compromission de l'hôte — corrigé en 0.31.1 (rappel 19.11)"
     }
   ],
-  "limites": "Ajouts KEV du 19.11 non vérifiés (catalogue CISA non lu directement). EPSS non vérifiés auprès de FIRST. Édition produite à 08h45 au lieu de 07h47 (tâche planifiée en pause ce matin).",
+  "limites": "Ajouts KEV du 19.11 non vérifiés (catalogue CISA non lu directement). EPSS non vérifiés auprès de FIRST. Édition produite à 08h45 au lieu de 07h47.",
   "checklist": [
     {
       "team": "Systèmes",
-      "text": "relever les versions vCenter et préparer un E-CAB si vulnérable (CVE-2026-123890)."
+      "text": "relever les versions vCenter et préparer un E-CAB si vulnérable (CVE-2026-123890).",
+      "teams": [
+        "systemes"
+      ]
     },
     {
       "team": "Systèmes",
-      "text": "si Confluence DC : désactiver l'API distante XML-RPC/SOAP aujourd'hui (Axis, échéance KEV 21.11)."
+      "text": "si Confluence Data Center est utilisé : désactiver l'API distante XML-RPC/SOAP (Apache Axis, échéance KEV 21.11).",
+      "teams": [
+        "systemes"
+      ]
     },
     {
       "team": "Systèmes",
-      "text": "Java4Shell : -XX:-UseBASE64Intrinsics sur les JVM exposées en attendant Red Hat ; inventaire httpd avec HTTP/2."
+      "text": "Java4Shell : -XX:-UseBASE64Intrinsics sur les JVM exposées en attendant Red Hat ; inventaire httpd avec HTTP/2.",
+      "teams": [
+        "systemes"
+      ]
     },
     {
       "team": "Poste de travail / SD",
-      "text": "Outlook et Chrome à jour avant l'échéance KEV du 24.11."
+      "text": "Outlook et Chrome à jour avant l'échéance KEV du 24.11.",
+      "teams": [
+        "sd"
+      ]
     },
     {
       "team": "Tous",
-      "text": "préparer les changements non urgents pour le CAB de mardi."
+      "text": "préparer les changements non urgents pour le CAB de mardi.",
+      "teams": [
+        "reseau",
+        "systemes",
+        "sd"
+      ]
+    }
+  ],
+  "publishedAt": "2026-11-20T08:45:00+01:00",
+  "serviceDesk": [
+    {
+      "title": "Mise à jour Chrome",
+      "text": "Chrome corrige une faille activement exploitée (CVE-2026-125350, version 157.0.8103.50). La mise à jour s'applique au **redémarrage du navigateur**.",
+      "phrase": "C'est une mise à jour de sécurité importante : fermez complètement Chrome et rouvrez-le, vos onglets seront restaurés."
+    },
+    {
+      "title": "Outlook — messages piégés",
+      "text": "Une faille Outlook exploitée (CVE-2026-124194) permet de récupérer l'empreinte du mot de passe via un fichier message piégé. Le correctif passe par les mises à jour Office de novembre.",
+      "phrase": "N'ouvrez pas de pièce jointe .msg inattendue ; si votre Office propose une mise à jour, acceptez-la et redémarrez Outlook."
     }
   ]
 }
