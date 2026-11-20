@@ -223,9 +223,13 @@
 
     document.title = 'Veille vulnérabilités – ' + (ed.dateLabel || ed.date || '');
     $('dateLabel').textContent = ed.dateLabel || ed.date || '';
-    $('s1').textContent = ed.stats?.kevYesterday ?? '–';
-    $('s2').textContent = ed.stats?.kevWeek ?? '–';
-    $('s3').textContent = ed.stats?.kevDue7d ?? '–';
+    const setStat = (id, v) => {
+      const b = $(id); const known = v !== undefined && v !== null && v !== '' && String(v).toUpperCase() !== 'NV';
+      b.textContent = known ? v : '?';
+      b.parentElement.classList.toggle('unknown', !known);
+      b.parentElement.title = known ? (ed.stats?.source ? 'Source : ' + ed.stats.source : '') : 'Non vérifié : ce chiffre n’a pas pu être récupéré pour cette édition.';
+    };
+    setStat('s1', ed.stats?.kevYesterday); setStat('s2', ed.stats?.kevWeek); setStat('s3', ed.stats?.kevDue7d);
     const allItems = [ed.une, ...(ed.kev || []), ...(ed.correctifs || [])].filter(Boolean);
     $('s4').textContent = allItems.filter(i => i.priority === 'P1').length;
     freshness(ed, !!m);

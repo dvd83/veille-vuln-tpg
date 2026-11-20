@@ -15,7 +15,7 @@ Le suivi des actions se fait dans Jira (bouton « Préparer le changement Jira �
 - Une édition archivée s'ouvre avec `#ed-AAAA-MM-JJ`.
 
 ## Format de `edition.json`
-- `date` (AAAA-MM-JJ), `dateLabel`, `publishedAt` (ISO 8601 avec fuseau), `stats{kevYesterday,kevWeek,kevDue7d}` (nombre ou « NV »)
+- `date` (AAAA-MM-JJ), `dateLabel`, `publishedAt` (ISO 8601 avec fuseau), `stats{kevYesterday,kevWeek,kevDue7d,source}` (nombre, ou « NV » si non vérifié → affiché « ? · non vérifié »). Les chiffres viennent du catalogue officiel cloné depuis https://github.com/cisagov/kev-data (le site cisa.gov bloque les outils de lecture).
 - `essentiel[]` : 2-3 phrases (`**gras**` autorisé, pas de HTML)
 - `semaine[]` (le lundi seulement) : 3-6 puces résumant la semaine écoulée
 - `serviceDesk[]` : `{title, text, phrase}` — ce qui touche les utilisateurs + phrase prête à dire au téléphone

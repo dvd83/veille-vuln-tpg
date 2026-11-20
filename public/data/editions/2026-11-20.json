@@ -2,13 +2,14 @@
   "date": "2026-11-20",
   "dateLabel": "Vendredi 20 novembre 2026",
   "stats": {
-    "kevYesterday": "NV",
-    "kevWeek": "NV",
-    "kevDue7d": "≥3"
+    "kevYesterday": 0,
+    "kevWeek": 7,
+    "kevDue7d": 8,
+    "source": "Catalogue CISA KEV v2026.11.18 (dépôt officiel cisagov/kev-data)"
   },
   "essentiel": [
     "À la une : **VMware vCenter** (CVE-2026-123890, CVSS 9.8), contournement d'authentification sans contournement possible, corrigé sur toutes les branches supportées. Google indique une exploitation en zero-day avant le correctif ; Broadcom ne signale pas d'attaque.",
-    "**Apache Axis** arrive à échéance KEV demain (21.11) avec un module Metasploit public. **Java4Shell** : un contournement existe en attendant les builds Red Hat, et **Apache httpd 2.4.71** corrige une RCE critique dans mod_http2."
+    "**Apache Axis** arrive à échéance KEV demain (21.11) avec un module Metasploit public. **Java4Shell** : un contournement existe en attendant les builds Red Hat, et **Apache httpd 2.4.71** corrige une RCE critique dans mod_http2. Côté réseau : l'échéance KEV de **SonicWall SSLVPN** (CVE-2026-19868) tombe aujourd'hui."
   ],
   "une": {
     "key": "CVE-2026-123890",
@@ -115,7 +116,8 @@
       ],
       "teams": [
         "systemes"
-      ]
+      ],
+      "kevDue": "2026-12-01"
     }
   ],
   "correctifs": [
@@ -195,6 +197,24 @@
     }
   ],
   "chaud": [
+    {
+      "key": "CVE-2026-19868",
+      "title": "SonicWall SonicOS SSLVPN — contournement de l'authentification SAML",
+      "cves": [
+        "CVE-2026-19868"
+      ],
+      "priority": "P1",
+      "kevDue": "2026-11-20",
+      "tag": {
+        "label": "Exploitée · KEV 06.11",
+        "level": "red"
+      },
+      "sub": "Un utilisateur disposant d'identifiants valides pour une autre méthode d'authentification peut contourner les contrôles SAML. Si un VPN SSL SonicWall est utilisé : appliquer le correctif éditeur.",
+      "team": "Réseau",
+      "teams": [
+        "reseau"
+      ]
+    },
     {
       "key": "CVE-2026-124194",
       "title": "Outlook",
@@ -295,12 +315,12 @@
         "CVE-2026-90817"
       ],
       "priority": "P1",
-      "kevDue": "2026-12-02",
+      "kevDue": "2026-11-21",
       "tag": {
         "label": "KEV 18.11",
         "level": "red"
       },
-      "sub": "Échéance KEV 02.12 pour LiteLLM ; vérifier tout NAS Synology.",
+      "sub": "Échéance KEV 21.11 pour Synology DSM et REDCap, 02.12 pour LiteLLM ; vérifier tout NAS Synology.",
       "team": "Stockage · SecOps",
       "teams": [
         "systemes"
@@ -325,15 +345,28 @@
       "product": "Dokploy (+4 CVE)",
       "cvss": "9,9",
       "note": "Compromission de l'hôte — corrigé en 0.31.1 (rappel 19.11)"
+    },
+    {
+      "cve": "CVE-2026-111793",
+      "product": "Openwave Webtop Media Transcoder",
+      "cvss": "NV",
+      "note": "KEV 10.11 — échéance 24.11"
     }
   ],
-  "limites": "Ajouts KEV du 19.11 non vérifiés (catalogue CISA non lu directement). EPSS non vérifiés auprès de FIRST. Édition produite à 08h45 au lieu de 07h47.",
+  "limites": "Comptages KEV tirés du catalogue officiel (v2026.11.18). EPSS non vérifiés auprès de FIRST. Édition produite à 08h45 au lieu de 07h47.",
   "checklist": [
     {
       "team": "Systèmes",
       "text": "relever les versions vCenter et préparer un E-CAB si vulnérable (CVE-2026-123890).",
       "teams": [
         "systemes"
+      ]
+    },
+    {
+      "team": "Réseau",
+      "text": "si un VPN SSL SonicWall est utilisé : vérifier le correctif CVE-2026-19868 (échéance KEV aujourd'hui).",
+      "teams": [
+        "reseau"
       ]
     },
     {
@@ -378,6 +411,19 @@
       "title": "Outlook — messages piégés",
       "text": "Une faille Outlook exploitée (CVE-2026-124194) permet de récupérer l'empreinte du mot de passe via un fichier message piégé. Le correctif passe par les mises à jour Office de novembre.",
       "phrase": "N'ouvrez pas de pièce jointe .msg inattendue ; si votre Office propose une mise à jour, acceptez-la et redémarrez Outlook."
+    }
+  ],
+  "kevCalendar": [
+    {
+      "key": "CVE-2026-20320",
+      "title": "Cisco BroadWorks — XXE (lecture de configuration)",
+      "cves": [
+        "CVE-2026-20320"
+      ],
+      "kevDue": "2026-11-24",
+      "teams": [
+        "reseau"
+      ]
     }
   ]
 }
