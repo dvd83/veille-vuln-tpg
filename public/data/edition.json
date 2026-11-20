@@ -1,84 +1,80 @@
 {
-  "date": "2026-11-19",
-  "dateLabel": "Jeudi 19 novembre 2026",
+  "date": "2026-11-20",
+  "dateLabel": "Vendredi 20 novembre 2026",
   "stats": {
-    "kevYesterday": 4,
-    "kevWeek": 7,
-    "kevDue7d": 8
+    "kevYesterday": "NV",
+    "kevWeek": "NV",
+    "kevDue7d": "≥3"
   },
   "essentiel": [
-    "La journée est dominée par **« Java4Shell »**, une faille critique dans le cœur de Java 17+ que la CISA demande de corriger immédiatement. Pas encore d'exploitation confirmée, mais les détails techniques ont fuité.",
-    "Côté exploitations actives : **Apache Axis** (via Confluence Data Center et N-able N-central) et **Puppet Enterprise** rejoignent le catalogue KEV. Rappel : l'**Outlook zero-day** du Patch Tuesday a une échéance KEV au 24 novembre."
+    "À la une : **VMware vCenter** (CVE-2026-123890, CVSS 9.8), contournement d'authentification sans contournement possible, corrigé sur toutes les branches supportées. Google indique une exploitation en zero-day avant le correctif ; Broadcom ne signale pas d'attaque.",
+    "**Apache Axis** arrive à échéance KEV demain (21.11) avec un module Metasploit public. **Java4Shell** : un contournement existe en attendant les builds Red Hat, et **Apache httpd 2.4.71** corrige une RCE critique dans mod_http2."
   ],
   "une": {
-    "key": "CVE-2026-114938",
-    "title": "Java4Shell — RCE sans authentification dans OpenJDK / Oracle Java",
+    "key": "CVE-2026-123890",
+    "title": "VMware vCenter — contournement d'authentification (VMware Directory Service)",
     "cves": [
-      "CVE-2026-114938"
-    ],
-    "tags": [
-      {
-        "label": "Critique · CVSSv4 9.2",
-        "level": "red"
-      },
-      {
-        "label": "Exploitation non confirmée",
-        "level": "amber"
-      },
-      {
-        "label": "Patch dispo 17.11",
-        "level": "grey"
-      }
-    ],
-    "body": "Débordement de tas dans le décodeur Base64 de la JVM HotSpot x86-64, Java 17 et plus. Une entrée Base64 forgée peut faire planter la JVM et permettre une exécution de code à distance. Oracle a publié des builds corrigés le 17 novembre ; mettre à jour le runtime est la seule correction complète. L'exploitation dépendrait de certains processeurs, mais la cause racine est publique.",
-    "pourNous": "Systèmes + SecOps : inventaire des JDK/JRE ≥ 17 (serveurs applicatifs, images OpenShift, appliances éditeurs), priorité aux services exposés.",
-    "sources": [
-      {
-        "label": "CISA",
-        "url": "https://www.cisa.gov/news-events/alerts/2026/11/17/critical-java-vulnerability-requires-immediate-patching"
-      },
-      {
-        "label": "Qualys",
-        "url": "https://blog.qualys.com/vulnerabilities-threat-research/2026/11/17/how-to-find-mitigate-and-patch-the-critical-java4shell-flaw-cve-2026-114938-now"
-      },
-      {
-        "label": "Rapid7",
-        "url": "https://www.rapid7.com/blog/post/etr-cve-2026-114938-reported-critical-pre-authentication-remote-code-execution-java-17/"
-      }
+      "CVE-2026-123890"
     ],
     "priority": "P1",
     "epss": "NV",
-    "fix": "Builds Oracle du 17.11 (mise à jour du runtime Java)"
+    "tags": [
+      {
+        "label": "CVSS 9.8",
+        "level": "red"
+      },
+      {
+        "label": "Zero-day selon Google, NV Broadcom",
+        "level": "amber"
+      },
+      {
+        "label": "Pas de contournement",
+        "level": "grey"
+      }
+    ],
+    "body": "Un attaquant ayant un accès réseau au vCenter peut contourner l'authentification. Touche vCenter 8.0, 9.0 et 9.1 (et les builds VCF / vSphere Foundation), avec ou sans Enhanced Linked Mode ; 6.5, 6.7 et 7.0 sont à présumer vulnérables. Broadcom ne liste aucun contournement. L'équipe threat intelligence de Google indique une exploitation en zero-day plus de deux mois avant le correctif ; Broadcom ne signale ni attaque ni exploit public.",
+    "fix": "Correctifs pour toutes les branches supportées (VMSA-2026-0009). Attention : vCenter 8.0 U3m ou 9.0.2.0200 bloque une montée ultérieure vers VCF 9.1.1",
+    "pourNous": "Systèmes : relever la version de chaque vCenter, vérifier qu'il n'est joignable que depuis le réseau d'admin, et préparer un E-CAB si la version est vulnérable.",
+    "sources": [
+      {
+        "label": "The Hacker News",
+        "url": "https://thehackernews.com/2026/11/critical-vmware-vcenter-flaw-cvss-98.html"
+      }
+    ]
   },
   "kev": [
     {
       "key": "CVE-2026-90436",
-      "title": "Apache Axis 1.x — RCE non authentifiée",
+      "title": "Apache Axis 1.x — RCE non authentifiée (via Confluence Data Center, N-central)",
       "cves": [
         "CVE-2026-90436"
       ],
+      "priority": "P1",
+      "kevDue": "2026-11-21",
+      "epss": "1,13 % (NV FIRST)",
       "tags": [
         {
           "label": "KEV 18.11",
           "level": "red"
         },
         {
-          "label": "CVSS 9.8",
+          "label": "Metasploit public",
           "level": "red"
         }
       ],
-      "body": "Réflexion non sûre dans l'implémentation SOAP Axis. Divulguée le 6 novembre, elle touche certaines versions de Confluence Data Center et de N-able N-central, toutes deux désormais attaquées.",
-      "pourNous": "Vérifier si Confluence DC est utilisé ; chercher des JAR Axis 1.x dans les applis Java legacy.",
+      "body": "Rapid7 a détecté l'exploitation contre Confluence Data Center ; un module Metasploit publié le 17.11 donne une RCE non authentifiée quand l'« API distante (XML-RPC & SOAP) » est activée. N-able signale aussi des attaques contre N-central.",
+      "fix": "Pas de version Axis corrective (fin de vie) : mises à jour Atlassian / N-able, ou désactiver l'API distante de Confluence",
+      "pourNous": "Si Confluence DC est utilisé : désactiver l'API distante XML-RPC/SOAP aujourd'hui et appliquer le correctif Atlassian. Échéance KEV demain.",
       "sources": [
         {
           "label": "Rapid7",
           "url": "https://www.rapid7.com/blog/post/etr-rapid7-detected-exploitation-of-cve-2026-90436-against-atlassian-confluence-data-center-n-able-n-central-also-exploited/"
+        },
+        {
+          "label": "SecurityWeek",
+          "url": "https://www.securityweek.com/critical-apache-roller-axis-vulnerabilities-exploited-in-attacks/"
         }
-      ],
-      "priority": "P1",
-      "kevDue": "2026-11-21",
-      "epss": "1,13 %",
-      "fix": "Pas de version corrective (Axis 1.x en fin de vie) : patch du commit 41f3b4e8 ou migration vers un moteur SOAP maintenu"
+      ]
     },
     {
       "key": "CVE-2026-115731",
@@ -86,6 +82,8 @@
       "cves": [
         "CVE-2026-115731"
       ],
+      "priority": "P1",
+      "epss": "NV",
       "tags": [
         {
           "label": "KEV 17.11",
@@ -96,48 +94,91 @@
           "level": "red"
         }
       ],
-      "body": "Dans le traitement des rapports : tout client disposant d'un certificat agent signé par la CA peut exécuter du code sur le serveur.",
+      "body": "Exploitable par tout client détenant un certificat signé par la CA Puppet. Perforce a publié les correctifs le 3 novembre.",
+      "fix": "Mises à jour Perforce du 03.11 (versions exactes NV)",
       "pourNous": "Systèmes : concerné seulement si Puppet sert à la gestion de configuration.",
       "sources": [
         {
           "label": "The Hacker News",
           "url": "https://thehackernews.com/2026/11/hackers-exploiting-critical-puppet-rce.html"
+        },
+        {
+          "label": "Security Affairs",
+          "url": "https://securityaffairs.com/203377/hacking/u-s-cisa-adds-perforce-puppet-enterprise-flaw-to-its-known-exploited-vulnerabilities-catalog.html"
         }
+      ]
+    }
+  ],
+  "correctifs": [
+    {
+      "key": "CVE-2026-114938",
+      "title": "Java4Shell — mise à jour : contournement disponible, Red Hat pas encore prêt",
+      "cves": [
+        "CVE-2026-114938"
       ],
       "priority": "P1",
-      "epss": "0,69 %"
-    },
-    {
-      "key": "KEV-2026-11-18-autres",
-      "title": "Autres ajouts KEV d'hier",
-      "cves": [
-        "CVE-2024-10441",
-        "CVE-2026-40217",
-        "CVE-2026-90817"
-      ],
+      "epss": "NV",
       "tags": [
         {
-          "label": "KEV 18.11",
+          "label": "CVSSv4 9.2",
           "level": "red"
         },
         {
-          "label": "Hors périmètre probable",
+          "label": "Exploitation non confirmée",
+          "level": "amber"
+        }
+      ],
+      "body": "Débordement dans le décodeur Base64 accéléré de la JVM (Java 17, 21, 25, 27). Des chaînes d'exploitation existent pour Jira, Jenkins et Keycloak ; pas d'exploit universel. Amazon Corretto est corrigé, Red Hat prépare encore ses correctifs.",
+      "fix": "Builds Oracle du 17.11 ; en attendant : lancer la JVM avec -XX:-UseBASE64Intrinsics",
+      "pourNous": "Systèmes : appliquer -XX:-UseBASE64Intrinsics sur les JVM RHEL/OpenShift exposées en attendant les paquets Red Hat ; prioriser Jira, Jenkins, Keycloak.",
+      "sources": [
+        {
+          "label": "BleepingComputer",
+          "url": "https://bleepingcomputer.com/news/security/critical-java4shell-flaw-allows-rce-attacks-on-major-java-applications"
+        },
+        {
+          "label": "SecNews",
+          "url": "https://www.secnews.gr/en/752115/java4shell-rce-jira-jenkins-keycloak/"
+        },
+        {
+          "label": "Qualys",
+          "url": "https://blog.qualys.com/vulnerabilities-threat-research/2026/11/17/how-to-find-mitigate-and-patch-the-critical-java4shell-flaw-cve-2026-114938-now"
+        }
+      ]
+    },
+    {
+      "key": "CVE-2026-119618",
+      "title": "Apache HTTP Server — RCE dans mod_http2",
+      "cves": [
+        "CVE-2026-119618"
+      ],
+      "priority": "P1",
+      "epss": "NV",
+      "tags": [
+        {
+          "label": "CVSS 9.8",
+          "level": "red"
+        },
+        {
+          "label": "Non au KEV",
           "level": "grey"
         }
       ],
-      "body": "Synology DSM, BerriAI LiteLLM et REDCap.",
-      "pourNous": "Stockage : un NAS Synology quelque part (sauvegarde secondaire, labo) ? LiteLLM : des équipes testent-elles des passerelles IA ?",
+      "body": "Condition de course dans mod_http2 exploitable sans authentification sur httpd 2.4.55 à 2.4.70 quand HTTP/2 est activé. Pas d'exploitation confirmée.",
+      "fix": "httpd 2.4.71 ; sinon désactiver HTTP/2",
+      "pourNous": "Systèmes : inventorier les Apache httpd (RHEL, reverse proxies) avec HTTP/2 actif ; suivre l'errata Red Hat, désactiver HTTP/2 en attendant.",
       "sources": [
         {
-          "label": "CISA",
-          "url": "https://www.cisa.gov/news-events/alerts/2026/11/18/cisa-adds-four-known-exploited-vulnerabilities-catalog"
+          "label": "The Hacker News",
+          "url": "https://thehackernews.com/2026/11/critical-apache-http2-flaw-could-let.html"
+        },
+        {
+          "label": "Red Hat",
+          "url": "https://access.redhat.com/security/cve/CVE-2026-119618"
         }
-      ],
-      "priority": "P1",
-      "fix": "Synology DSM 7.2.2-72806-1 (selon branche) ; LiteLLM et REDCap : NV"
+      ]
     }
   ],
-  "correctifs": [],
   "chaud": [
     {
       "key": "CVE-2026-124194",
@@ -145,14 +186,43 @@
       "cves": [
         "CVE-2026-124194"
       ],
+      "priority": "P1",
+      "kevDue": "2026-11-24",
       "tag": {
-        "label": "Exploitée · KEV dû 24.11",
+        "label": "Exploitée",
         "level": "red"
       },
-      "sub": "Fuite d'empreintes NTLM, seul zero-day du Patch Tuesday de novembre.",
-      "team": "Exchange · Poste de travail",
+      "sub": "Fuite d'empreintes NTLM via un fichier message forgé ; seul zero-day du Patch Tuesday.",
+      "team": "Exchange · Poste de travail"
+    },
+    {
+      "key": "CVE-2026-125350",
+      "title": "Chrome",
+      "cves": [
+        "CVE-2026-125350"
+      ],
       "priority": "P1",
-      "kevDue": "2026-11-24"
+      "kevDue": "2026-11-24",
+      "tag": {
+        "label": "Exploitée",
+        "level": "red"
+      },
+      "sub": "Use-after-free dans le composant XML, exploité ; corrigé en 157.0.8103.50.",
+      "team": "Poste de travail"
+    },
+    {
+      "key": "CVE-2026-123158",
+      "title": "OpenSSH « SSHole »",
+      "cves": [
+        "CVE-2026-123158"
+      ],
+      "priority": "P1",
+      "tag": {
+        "label": "Exploitée · KEV",
+        "level": "red"
+      },
+      "sub": "musl sans PAM (Alpine, OpenWrt, embarqué) ; RHEL non concerné.",
+      "team": "Systèmes · Réseau"
     },
     {
       "key": "CVE-2026-116928",
@@ -161,113 +231,88 @@
         "CVE-2026-116928",
         "CVE-2026-119958"
       ],
+      "priority": "P2",
       "tag": {
         "label": "Critique 9.8",
         "level": "amber"
       },
-      "sub": "RCE non exploitées à ce jour ; contrôleurs de domaine en priorité.",
-      "team": "Systèmes",
-      "priority": "P2"
-    },
-    {
-      "key": "CVE-2026-123158",
-      "title": "OpenSSH « SSHole »",
-      "cves": [
-        "CVE-2026-123158"
-      ],
-      "tag": {
-        "label": "Exploitée · KEV",
-        "level": "red"
-      },
-      "sub": "musl sans PAM (Alpine, OpenWrt, embarqué), corrigé en 10.6p2. RHEL non concerné.",
-      "team": "Systèmes · Réseau",
-      "priority": "P1"
-    },
-    {
-      "key": "CVE-2026-125350",
-      "title": "Chrome",
-      "cves": [
-        "CVE-2026-125350"
-      ],
-      "tag": {
-        "label": "Exploitée · KEV dû 24.11",
-        "level": "red"
-      },
-      "sub": "8e zero-day Chrome de 2026, corrigé en 157.0.8103.50.",
-      "team": "Poste de travail",
-      "priority": "P1",
-      "kevDue": "2026-11-24"
+      "sub": "Cumulatif de novembre, contrôleurs de domaine en priorité.",
+      "team": "Systèmes"
     },
     {
       "key": "FORTINET-2026-11-10",
-      "title": "Fortinet — 89 avis du 10.11",
+      "title": "Fortinet — avis du 10.11",
       "cves": [
         "CVE-2026-126253",
         "CVE-2026-126254"
       ],
+      "priority": "P2",
       "tag": {
         "label": "~17 critiques",
         "level": "amber"
       },
-      "sub": "Dont FortiOS OSPF et BGP.",
-      "team": "Réseau",
-      "priority": "P2"
-    }
-  ],
-  "checklist": [
-    {
-      "team": "Systèmes",
-      "text": "lancer l'inventaire Java ≥ 17 (Java4Shell) et préparer un changement pour le CAB de mardi."
+      "sub": "FortiOS OSPF et BGP.",
+      "team": "Réseau"
     },
     {
-      "team": "Poste de travail / SD",
-      "text": "contrôler le déploiement Office (Outlook) et Chrome avant l'échéance du 24.11."
-    },
-    {
-      "team": "Systèmes",
-      "text": "confirmer le cumulatif de novembre sur les contrôleurs de domaine (LDAP)."
-    },
-    {
-      "team": "Réseau",
-      "text": "vérifier les versions FortiOS si OSPF/BGP actifs sur les FortiGate."
+      "key": "KEV-2026-11-18-autres",
+      "title": "Synology DSM · LiteLLM · REDCap",
+      "cves": [
+        "CVE-2024-10441",
+        "CVE-2026-40217",
+        "CVE-2026-90817"
+      ],
+      "priority": "P1",
+      "kevDue": "2026-12-02",
+      "tag": {
+        "label": "KEV 18.11",
+        "level": "red"
+      },
+      "sub": "Échéance KEV 02.12 pour LiteLLM ; vérifier tout NAS Synology.",
+      "team": "Stockage · SecOps"
     }
   ],
   "horsPerimetre": [
     {
+      "cve": "CVE-2026-129448",
+      "product": "Apache Roller",
+      "cvss": "9,8",
+      "note": "RCE non authentifiée, exploitation confirmée par Apache — versions 4.0.0 à 6.1.4"
+    },
+    {
       "cve": "CVE-2026-130778",
       "product": "Incus",
       "cvss": "10,0",
-      "note": "Contournement d'authentification TLS — corrigé en 7.6.0"
+      "note": "Contournement d'authentification TLS — corrigé en 7.6.0 (rappel 19.11)"
     },
     {
       "cve": "CVE-2026-129989",
-      "product": "Dokploy (+4 autres CVE)",
+      "product": "Dokploy (+4 CVE)",
       "cvss": "9,9",
-      "note": "Compromission de l'hôte — corrigé en 0.31.1"
-    },
-    {
-      "cve": "CVE-2026-73969",
-      "product": "AnsibleForms",
-      "cvss": "9,8",
-      "note": "Falsification de JWT si ACCESS_TOKEN_SECRET absent — corrigé en 6.2.1"
-    },
-    {
-      "cve": "CVE-2026-130759",
-      "product": "FleetDM Fleet",
-      "cvss": "9,4",
-      "note": "Contournement SAML SSO — correctifs par branche"
-    },
-    {
-      "cve": "CVE-2026-132143",
-      "product": "DrayTek Vigor2960",
-      "cvss": "9,4",
-      "note": "Débordement de pile (sauvegardes) — correctif NV"
+      "note": "Compromission de l'hôte — corrigé en 0.31.1 (rappel 19.11)"
     }
   ],
-  "volume": {
-    "published": 712,
-    "critical": 100,
-    "source": "CVE Now, CVE publiées le 18.11"
-  },
-  "limites": "EPSS non vérifiés auprès de FIRST sauf mention ; versions/correctifs « NV » = non vérifiés dans les sources consultées. Pas d'inventaire d'actifs tpg : la colonne « Pour nous » reste une piste à valider."
+  "limites": "Ajouts KEV du 19.11 non vérifiés (catalogue CISA non lu directement). EPSS non vérifiés auprès de FIRST. Édition produite à 08h45 au lieu de 07h47 (tâche planifiée en pause ce matin).",
+  "checklist": [
+    {
+      "team": "Systèmes",
+      "text": "relever les versions vCenter et préparer un E-CAB si vulnérable (CVE-2026-123890)."
+    },
+    {
+      "team": "Systèmes",
+      "text": "si Confluence DC : désactiver l'API distante XML-RPC/SOAP aujourd'hui (Axis, échéance KEV 21.11)."
+    },
+    {
+      "team": "Systèmes",
+      "text": "Java4Shell : -XX:-UseBASE64Intrinsics sur les JVM exposées en attendant Red Hat ; inventaire httpd avec HTTP/2."
+    },
+    {
+      "team": "Poste de travail / SD",
+      "text": "Outlook et Chrome à jour avant l'échéance KEV du 24.11."
+    },
+    {
+      "team": "Tous",
+      "text": "préparer les changements non urgents pour le CAB de mardi."
+    }
+  ]
 }
